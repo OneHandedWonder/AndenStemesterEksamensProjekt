@@ -110,12 +110,12 @@ if ($Reinit) {
     Write-Host "                      REINIT MODE: SQL EXECUTION ONLY" -ForegroundColor Cyan
     Write-Host "============================================================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "This will:" -ForegroundColor Yellow
-    Write-Host "  â€¢ Skip container/volume cleanup" -ForegroundColor Yellow
-    Write-Host "  â€¢ Use the existing running database" -ForegroundColor Yellow
-    Write-Host "  â€¢ Execute all SQL scripts from dbInit folder" -ForegroundColor Yellow
+    Write-Host "" -ForegroundColor Yellow
+    Write-Host "  Skip container/volume cleanup" -ForegroundColor Yellow
+    Write-Host "  Use the existing running database" -ForegroundColor Yellow
+    Write-Host "  Execute all SQL scripts from dbInit folder" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "âš ï¸  This will run SQL scripts against your existing database!" -ForegroundColor Yellow
+    Write-Host "  This will run SQL scripts against your existing database!" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "============================================================================" -ForegroundColor Cyan
     Write-Host ""
@@ -147,16 +147,16 @@ if ($Reinit) {
     # ============================================================================
     Write-Host ""
     Write-Host "============================================================================" -ForegroundColor Red
-    Write-Host "                           âš ï¸  WARNING  âš ï¸" -ForegroundColor Red
+    Write-Host "                             WARNING  " -ForegroundColor Red
     Write-Host "============================================================================" -ForegroundColor Red
     Write-Host ""
     Write-Host "This script will:" -ForegroundColor Yellow
-    Write-Host "  â€¢ Stop and remove the existing database container" -ForegroundColor Yellow
-    Write-Host "  â€¢ DELETE ALL DATA in the database volume" -ForegroundColor Yellow
-    Write-Host "  â€¢ Create a fresh PostgreSQL database" -ForegroundColor Yellow
-    Write-Host "  â€¢ Run all SQL scripts in the dbInit folder" -ForegroundColor Yellow
+    Write-Host "  Stop and remove the existing database container" -ForegroundColor Yellow
+    Write-Host "  DELETE ALL DATA in the database volume" -ForegroundColor Yellow
+    Write-Host "  Create a fresh PostgreSQL database" -ForegroundColor Yellow
+    Write-Host "  Run all SQL scripts in the dbInit folder" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "âš ï¸  ALL EXISTING DATA WILL BE PERMANENTLY LOST!" -ForegroundColor Red
+    Write-Host "  ALL EXISTING DATA WILL BE PERMANENTLY LOST!" -ForegroundColor Red
     Write-Host ""
     Write-Host "============================================================================" -ForegroundColor Red
     Write-Host ""
@@ -304,7 +304,6 @@ if ($sqlFileCount -gt 0) {
     }
     
     Write-Host ""
-    Write-Host "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€" -ForegroundColor Gray
     Write-Host "SQL Execution Summary:" -ForegroundColor Cyan
     Write-Host "  Total files: $sqlFileCount" -ForegroundColor White
     Write-Host "  Successful:  $successCount" -ForegroundColor Green
@@ -313,7 +312,6 @@ if ($sqlFileCount -gt 0) {
     } else {
         Write-Host "  Failed:      $failCount" -ForegroundColor Green
     }
-    Write-Host "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€" -ForegroundColor Gray
 } else {
     Write-Warning-Custom "No SQL files found in $dbInitFolder folder"
     Write-Info "Add .sql files to $dbInitFolder to have them executed automatically"
