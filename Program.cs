@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using AndenStemesterEksamensProjekt.Data;
 using AndenStemesterEksamensProjekt.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,10 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// Register DbContext with PostgreSQL
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register database service
 builder.Services.AddScoped<DatabaseService>();
