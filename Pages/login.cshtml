@@ -69,16 +69,24 @@
 <div class="login-container">
     <div class="login-box">
         <h2 class="login-title">Login</h2>
+        
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem;">
+                @Model.ErrorMessage
+            </div>
+        }
+        
         <form method="post">
             <div class="form-group">
                 <label class="form-label" for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" required />
+                <input type="email" id="email" asp-for="Email" class="form-control" required />
             </div>
             <div class="form-group">
-                <label class="form-label" for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required />
+                <label class="form-label" for="password">Adgangskode</label>
+                <input type="password" id="password" asp-for="Password" class="form-control" required />
             </div>
-            <button type="submit" class="btn-login">Login</button>
+            <button type="submit" class="btn-login">Log ind</button>
         </form>
     </div>
 </div>
