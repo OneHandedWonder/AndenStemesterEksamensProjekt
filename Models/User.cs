@@ -30,5 +30,10 @@ namespace AndenStemesterEksamensProjekt.Models
         
         [Column("is_active")]
         public bool IsActive { get; set; }
+
+        [Column("role")]
+        [MaxLength(50)]
+        public string role { get; set; }
+
     }
 }

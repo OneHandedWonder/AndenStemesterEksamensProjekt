@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE
+    role VARCHAR(50) DEFAULT 'guest'
 );
 
 -- Create index on email for faster lookups
