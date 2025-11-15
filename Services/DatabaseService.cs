@@ -54,5 +54,20 @@ namespace AndenStemesterEksamensProjekt.Services
             
             return user.Uid;
         }
+        /// <summary>
+        /// hent en bruger ud fra deres uid
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <returns></returns>
+        public async Task<User?> GetUserByIdAsync(int uid)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Uid == uid && u.IsActive);
+        }
+        public async Task<Profile?> GetprofileAsync(int userId)
+        {
+            return await _context.CurrentProfile
+                .FirstOrDefaultAsync(p => p.Uid == userId);
+        }
     }
 }

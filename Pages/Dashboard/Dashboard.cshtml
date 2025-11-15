@@ -1,0 +1,30 @@
+﻿@page
+@model AndenStemesterEksamensProjekt.Pages.Dashboard.DashboardModel
+
+<h1>Profilside</h1>
+
+<div>
+    <h2>Bruger information</h2>
+    <p>User ID: @Model.CurrentUser?.Uid</p>
+    <p>Role: @Model.CurrentUser?.role</p>
+    <p>Last Login: @Model.CurrentUser?.LastLogin?.ToString("dd/MM/yyyy HH:mm")</p>
+    <p>Account Created: @Model.CurrentUser?.CreatedAt.ToString("dd/MM/yyyy")</p>
+</div>
+
+@if (Model.CurrentProfile != null)
+{
+    <div>
+        <h2>Profil information</h2>
+        <p><strong>Navn:</strong> @Model.CurrentProfile.Navn</p>
+        <p><strong>Adresse:</strong> @Model.CurrentProfile.Adresse</p>
+        <p><strong>Mobil nr.:</strong> @Model.CurrentProfile.MobilNr</p>
+        <p><strong>Profil oprettet:</strong> @Model.CurrentProfile.CreatedAt.ToString("dd/MM/yyyy")</p>
+    </div>
+}
+else
+{
+    <div>
+        <p>Ingen profil information fundet.</p>
+        <a href="/Profile/Create" class="btn btn-primary">Opret profil</a>
+    </div>
+}

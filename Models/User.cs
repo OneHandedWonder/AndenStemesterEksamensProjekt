@@ -34,6 +34,5 @@ namespace AndenStemesterEksamensProjekt.Models
         [Column("role")]
         [MaxLength(50)]
         public string role { get; set; }
-
     }
 }

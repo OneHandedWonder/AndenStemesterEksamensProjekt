@@ -67,7 +67,7 @@ namespace AndenStemesterEksamensProjekt.Pages
                 _logger.LogInformation("User {Email} logged in successfully", user.Email);
 
                 // Redirect to home page
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Dashboard/Dashboard");
             }
             catch (Exception ex)
             {
