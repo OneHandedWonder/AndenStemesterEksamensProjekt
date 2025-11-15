@@ -71,7 +71,7 @@ namespace AndenStemesterEksamensProjekt.Pages
                 {
                     return RedirectToPage("/Index");
                 } else {
-                    return RedirectToPage("/Dashboard");
+                    return RedirectToPage("Dashboard/Dashboard");
                 }
             }
             catch (Exception ex)
