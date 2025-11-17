@@ -10,10 +10,9 @@ namespace AndenStemesterEksamensProjekt.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Profile> CurrentProfile { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public DbSet<User> Users { get; set; }
+    public DbSet<Profile> CurrentProfile { get; set; }
+    public DbSet<Session> Sessions { get; set; }        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 

@@ -25,8 +25,35 @@ namespace AndenStemesterEksamensProjekt.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
+            // Check for valid session cookie
+            var sessionToken = Request.Cookies["SessionToken"];
+            if (!string.IsNullOrEmpty(sessionToken))
+            {
+                var userId = await _dbService.ValidateSessionAsync(sessionToken);
+                if (userId.HasValue)
+                {
+                    // Valid session found - get user and redirect
+                    var user = await _dbService.GetUserByIdAsync(userId.Value);
+                    if (user != null)
+                    {
+                        HttpContext.Session.SetInt32("UserId", user.Uid);
+                        HttpContext.Session.SetString("UserEmail", user.Email);
+                        HttpContext.Session.SetString("SessionToken", sessionToken);
+                        
+                        // Redirect based on role
+                        if (user.Role == "guest")
+                        {
+                            Response.Redirect("/Index");
+                        }
+                        else
+                        {
+                            Response.Redirect("/Dashboard/Profil");
+                        }
+                    }
+                }
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -60,18 +87,31 @@ namespace AndenStemesterEksamensProjekt.Pages
                 // Update last login
                 await _dbService.UpdateLastLoginAsync(user.Uid);
 
+                // Create session token
+                var sessionToken = await _dbService.CreateSessionAsync(user.Uid);
+
                 // Set session
                 HttpContext.Session.SetInt32("UserId", user.Uid);
                 HttpContext.Session.SetString("UserEmail", user.Email);
+                HttpContext.Session.SetString("SessionToken", sessionToken);
 
-                _logger.LogInformation("User {Email} logged in successfully", user.Email);
+                // Set session token in cookie for persistence
+                Response.Cookies.Append("SessionToken", sessionToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddDays(30)
+                });
+
+                _logger.LogInformation("User {Email} logged in successfully with session token {SessionToken}", user.Email, sessionToken);
 
                 // Redirect to home page
                 if (user.Role == "guest")
                 {
                     return RedirectToPage("/Index");
                 } else {
-                    return RedirectToPage("Dashboard/Dashboard");
+                    return RedirectToPage("Dashboard/Profil");
                 }
             }
             catch (Exception ex)
