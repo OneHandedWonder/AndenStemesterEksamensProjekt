@@ -40,6 +40,7 @@ namespace AndenStemesterEksamensProjekt.Pages
                     {
                         HttpContext.Session.SetInt32("UserId", user.Uid);
                         HttpContext.Session.SetString("UserEmail", user.Email);
+                        HttpContext.Session.SetString("UserRole", user.Role);
                         HttpContext.Session.SetString("SessionToken", sessionToken);
                         
                         // Redirect based on role
@@ -93,6 +94,7 @@ namespace AndenStemesterEksamensProjekt.Pages
                 // Set session
                 HttpContext.Session.SetInt32("UserId", user.Uid);
                 HttpContext.Session.SetString("UserEmail", user.Email);
+                HttpContext.Session.SetString("UserRole", user.Role);
                 HttpContext.Session.SetString("SessionToken", sessionToken);
 
                 // Set session token in cookie for persistence

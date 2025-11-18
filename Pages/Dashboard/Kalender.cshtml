@@ -1,13 +1,13 @@
 @page
 @model AndenStemesterEksamensProjekt.Pages.Dashboard.KalenderModel
 @{
-    ViewData["Title"] = "Kalender";
+    ViewData["Title"] = "Min Oversigt";
 }
 
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-12">
-            <h2 class="mb-4">📅 Min Kalender</h2>
+            <h2 class="mb-4">Min Oversigt</h2>
 
             @if (!string.IsNullOrEmpty(Model.SuccessMessage))
             {
@@ -116,8 +116,8 @@
                                                 </div>
                                             }
                                             
-                                            @* Add participant form - only show if user owns the event *@
-                                            @if (evt.UserId == Model.CurrentUserId)
+                                            @* Add participant form - only show if user is planner or admin *@
+                                            @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
                                             {
                                                 <div class="mt-3">
                                                     <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addParticipants@(evt.EventId)" aria-expanded="false">
@@ -159,8 +159,8 @@
                                         }
                                         </div>
                                         
-                                        @* Only show delete button if user owns the event *@
-                                        @if (evt.UserId == Model.CurrentUserId)
+                                        @* Only show delete button if user is planner or admin *@
+                                        @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
                                         {
                                             <form method="post" asp-page-handler="DeleteEvent" onsubmit="return confirm('Er du sikker på at du vil slette denne event?');">
                                                 <input type="hidden" name="eventId" value="@evt.EventId" />
@@ -186,12 +186,14 @@
         </div>
 
         <!-- Add Event Form -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">Tilføj Event</h5>
-                </div>
-                <div class="card-body">
+        @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Tilføj Event</h5>
+                    </div>
+                    <div class="card-body">
                     <form method="post" asp-page-handler="CreateEvent">
                         <div class="mb-3">
                             <label asp-for="NewEvent.Title" class="form-label">Titel *</label>
@@ -256,6 +258,7 @@
                 </div>
             </div>
         </div>
+        }
     </div>
 </div>
 

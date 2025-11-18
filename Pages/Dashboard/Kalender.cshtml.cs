@@ -22,6 +22,7 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
         public List<User> AllUsers { get; set; } = new();
         public Dictionary<int, List<EventParticipant>> EventParticipants { get; set; } = new();
         public int CurrentUserId { get; set; }
+        public string CurrentUserRole { get; set; } = string.Empty;
         public int CurrentYear { get; set; }
         public int CurrentMonth { get; set; }
         public string CurrentMonthName { get; set; } = string.Empty;
@@ -44,6 +45,14 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
                 return RedirectToPage("/Login");
             }
 
+            // Check if user is a guest - guests cannot access calendar
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole == "guest")
+            {
+                TempData["ErrorMessage"] = "Gæster har ikke adgang til kalenderen.";
+                return RedirectToPage("/Index");
+            }
+
             // Set current year and month
             CurrentYear = year ?? DateTime.Now.Year;
             CurrentMonth = month ?? DateTime.Now.Month;
@@ -51,6 +60,7 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
 
             // Store current user ID for view
             CurrentUserId = userId.Value;
+            CurrentUserRole = userRole ?? string.Empty;
 
             // Get events for current month
             Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, CurrentYear, CurrentMonth);
@@ -74,6 +84,15 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
             if (userId == null)
             {
                 return RedirectToPage("/Login");
+            }
+
+            // Check if user has permission to create events (only planners and admins)
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "planner" && userRole != "admin")
+            {
+                ErrorMessage = "Kun plannere og administratorer kan oprette events.";
+                Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, DateTime.Now.Year, DateTime.Now.Month);
+                return Page();
             }
 
             if (!ModelState.IsValid)
@@ -124,6 +143,14 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
             if (userId == null)
             {
                 return RedirectToPage("/Login");
+            }
+
+            // Check if user has permission to delete events (only planners and admins)
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "planner" && userRole != "admin")
+            {
+                ErrorMessage = "Kun plannere og administratorer kan slette events.";
+                return RedirectToPage();
             }
 
             try

@@ -41,10 +41,10 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Profil">Profil</a>
                             </li>
                         }
-                        @if (Context.Session.GetInt32("UserId") != null)
+                        @if (Context.Session.GetInt32("UserId") != null && Context.Session.GetString("UserRole") != "guest")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Kalender">Kalender</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Kalender">Oversigt</a>
                             </li>
                         }
                     </ul>
