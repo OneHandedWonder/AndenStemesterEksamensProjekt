@@ -53,15 +53,15 @@ print_step() {
 }
 
 print_success() {
-    echo -e "${GREEN}✓ $1${NC}"
+    echo -e "${GREEN}[OK] $1${NC}"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠ $1${NC}"
+    echo -e "${YELLOW}[WARNING] $1${NC}"
 }
 
 print_error() {
-    echo -e "${RED}✗ $1${NC}"
+    echo -e "${RED}[ERROR] $1${NC}"
 }
 
 print_info() {
@@ -127,7 +127,7 @@ if [ "$REINIT" = true ]; then
     echo -e "${YELLOW}  • Use the existing running database${NC}"
     echo -e "${YELLOW}  • Execute all SQL scripts from dbInit folder${NC}"
     echo ""
-    echo -e "${YELLOW}⚠️  This will run SQL scripts against your existing database!${NC}"
+    echo -e "${YELLOW}  This will run SQL scripts against your existing database!${NC}"
     echo ""
     echo -e "${CYAN}============================================================================${NC}"
     echo ""
@@ -157,7 +157,7 @@ else
     # ============================================================================
     echo ""
     echo -e "${RED}============================================================================${NC}"
-    echo -e "${RED}                           ⚠️  WARNING  ⚠️${NC}"
+    echo -e "${RED}                             WARNING${NC}"
     echo -e "${RED}============================================================================${NC}"
     echo ""
     echo -e "${YELLOW}This script will:${NC}"
@@ -166,7 +166,7 @@ else
     echo -e "${YELLOW}  • Create a fresh PostgreSQL database${NC}"
     echo -e "${YELLOW}  • Run all SQL scripts in the dbInit folder${NC}"
     echo ""
-    echo -e "${RED}⚠️  ALL EXISTING DATA WILL BE PERMANENTLY LOST!${NC}"
+    echo -e "${RED}  ALL EXISTING DATA WILL BE PERMANENTLY LOST!${NC}"
     echo ""
     echo -e "${RED}============================================================================${NC}"
     echo ""
@@ -271,6 +271,7 @@ if [ "$SQL_FILE_COUNT" -gt 0 ]; then
     
     SUCCESS_COUNT=0
     FAIL_COUNT=0
+    WARNING_COUNT=0
     
     # Process SQL files in alphabetical order
     while IFS= read -r -d '' sql_file; do
@@ -278,12 +279,38 @@ if [ "$SQL_FILE_COUNT" -gt 0 ]; then
         FILENAME=$(basename "$sql_file")
         print_info "Executing: $FILENAME"
         
-        if docker exec -i "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" < "$sql_file" &> /dev/null; then
-            print_success "Successfully executed: $FILENAME"
+        # Capture both stdout and stderr
+        OUTPUT=$(docker exec -i "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" < "$sql_file" 2>&1)
+        EXIT_CODE=$?
+        
+        # Check for NOTICE messages (not errors)
+        HAS_NOTICE=false
+        HAS_ERROR=false
+        
+        if echo "$OUTPUT" | grep -q "NOTICE:"; then
+            HAS_NOTICE=true
+        fi
+        
+        if echo "$OUTPUT" | grep -q "ERROR:" && ! echo "$OUTPUT" | grep -q "NOTICE:"; then
+            HAS_ERROR=true
+        fi
+        
+        # Determine status based on content analysis
+        if [ "$HAS_ERROR" = true ]; then
+            # Real error occurred
+            print_error "Failed to execute: $FILENAME"
+            print_info "Error: $OUTPUT"
+            FAIL_COUNT=$((FAIL_COUNT + 1))
+        elif [ "$HAS_NOTICE" = true ]; then
+            # Only notices, treat as warning
+            NOTICE_TEXT=$(echo "$OUTPUT" | grep "NOTICE:" | sed 's/.*NOTICE:[[:space:]]*//' | tr '\n' '; ' | sed 's/;$//')
+            print_warning "Executed with notices: $NOTICE_TEXT - $FILENAME"
+            WARNING_COUNT=$((WARNING_COUNT + 1))
             SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
         else
-            print_error "Failed to execute: $FILENAME"
-            FAIL_COUNT=$((FAIL_COUNT + 1))
+            # Clean success
+            print_success "Successfully executed: $FILENAME"
+            SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
         fi
     done < <(find "$DB_INIT_FOLDER" -maxdepth 1 -name "*.sql" -type f -print0 | sort -z)
     
@@ -292,6 +319,9 @@ if [ "$SQL_FILE_COUNT" -gt 0 ]; then
     echo -e "${CYAN}SQL Execution Summary:${NC}"
     echo -e "${WHITE}  Total files: $SQL_FILE_COUNT${NC}"
     echo -e "${GREEN}  Successful:  $SUCCESS_COUNT${NC}"
+    if [ $WARNING_COUNT -gt 0 ]; then
+        echo -e "${YELLOW}  Warnings:    $WARNING_COUNT${NC}"
+    fi
     if [ $FAIL_COUNT -gt 0 ]; then
         echo -e "${RED}  Failed:      $FAIL_COUNT${NC}"
     else

@@ -279,27 +279,66 @@ if ($sqlFileCount -gt 0) {
     
     $successCount = 0
     $failCount = 0
+    $warningCount = 0
     
     foreach ($sqlFile in $sqlFiles) {
         Write-Host ""
         Write-Info "Executing: $($sqlFile.Name)"
         
-        try {
-            # Execute SQL file via docker exec
-            $env:PGPASSWORD = $dbPassword
-            $result = Get-Content $sqlFile.FullName | docker exec -i $containerName psql -U $dbUser -d $dbName 2>&1
-            
-            if ($LASTEXITCODE -eq 0) {
-                Write-Success "Successfully executed: $($sqlFile.Name)"
-                $successCount++
-            } else {
-                Write-Error-Custom "Failed to execute: $($sqlFile.Name)"
-                Write-Info "Error: $result"
-                $failCount++
+        # Execute SQL file via docker exec
+        $env:PGPASSWORD = $dbPassword
+        
+        # Use try/catch to handle PowerShell's error stream
+        $prevErrorAction = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'  # Don't treat stderr as terminating error
+        
+        $result = Get-Content $sqlFile.FullName | docker exec -i $containerName psql -U $dbUser -d $dbName 2>&1
+        $exitCode = $LASTEXITCODE
+        
+        $ErrorActionPreference = $prevErrorAction
+        
+        # Convert result to string for analysis, handling ErrorRecords properly
+        $resultString = ""
+        if ($result) {
+            foreach ($item in $result) {
+                if ($item -is [System.Management.Automation.ErrorRecord]) {
+                    $resultString += $item.Exception.Message + "`n"
+                } else {
+                    $resultString += $item.ToString() + "`n"
+                }
             }
-        } catch {
-            Write-Error-Custom "Error executing $($sqlFile.Name): $($_.Exception.Message)"
+            $resultString = $resultString.Trim()
+        }
+        
+        # Check for NOTICE messages (these go to stderr but aren't errors)
+        $hasNotice = $resultString -match "NOTICE:"
+        
+        # Check for actual ERROR messages
+        $hasError = ($resultString -match "ERROR:") -and -not ($resultString -match "NOTICE:")
+        
+        # Determine status based on content analysis
+        if ($hasError) {
+            # Real error occurred
+            Write-Error-Custom "Failed to execute: $($sqlFile.Name)"
+            Write-Info "Error: $resultString"
             $failCount++
+        } elseif ($hasNotice) {
+            # Only notices, treat as warning
+            # Extract and clean up NOTICE message(s)
+            $noticeLines = @()
+            foreach ($line in ($resultString -split "`n")) {
+                if ($line -match 'NOTICE:\s+(.+)') {
+                    $noticeLines += $Matches[1]
+                }
+            }
+            $noticeText = $noticeLines -join "; "
+            Write-Warning-Custom "Executed with notices: $noticeText - $($sqlFile.Name)"
+            $warningCount++
+            $successCount++
+        } else {
+            # Clean success
+            Write-Success "Successfully executed: $($sqlFile.Name)"
+            $successCount++
         }
     }
     
@@ -307,6 +346,9 @@ if ($sqlFileCount -gt 0) {
     Write-Host "SQL Execution Summary:" -ForegroundColor Cyan
     Write-Host "  Total files: $sqlFileCount" -ForegroundColor White
     Write-Host "  Successful:  $successCount" -ForegroundColor Green
+    if ($warningCount -gt 0) {
+        Write-Host "  Warnings:    $warningCount" -ForegroundColor Yellow
+    }
     if ($failCount -gt 0) {
         Write-Host "  Failed:      $failCount" -ForegroundColor Red
     } else {
