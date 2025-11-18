@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     uid SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
+    firstName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -26,8 +28,8 @@ CREATE INDEX IF NOT EXISTS idx_users_active ON users(is_active);
 -- Insert a test user
 -- Email: test@example.com  
 -- Password: password123
-INSERT INTO users (email, password_hash, role) 
-VALUES ('test@example.com', '$2a$12$SPDmr7PZip/M2r8KVZk/veE4GHkWUkJsho93T1K9n2ox4isAd2e1e', 'admin') -- Hash for pw.
+INSERT INTO users (email, firstName, lastName, password_hash, role) 
+VALUES ('test@example.com', 'test', 'Admin', '$2a$12$SPDmr7PZip/M2r8KVZk/veE4GHkWUkJsho93T1K9n2ox4isAd2e1e', 'admin') -- Hash for pw.
 ON CONFLICT (email) DO NOTHING;
 
 -- Display created table

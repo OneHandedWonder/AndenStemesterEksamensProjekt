@@ -63,8 +63,16 @@
                             <div class="card mb-3 border-start border-4" style="border-left-color: @evt.Color !important;">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h5 class="card-title mb-2">@evt.Title</h5>
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                <h5 class="card-title mb-0">@evt.Title</h5>
+                                                @if (evt.UserId != Model.CurrentUserId)
+                                                {
+                                                    <span class="badge bg-info">
+                                                        <i class="bi bi-people"></i> Deltager
+                                                    </span>
+                                                }
+                                            </div>
                                             <p class="text-muted mb-2">
                                                 <i class="bi bi-clock"></i>
                                                 @if (evt.IsAllDay)
@@ -86,13 +94,81 @@
                                             {
                                                 <p class="card-text">@evt.Description</p>
                                             }
+                                            
+                                            @* Show participants *@
+                                            @if (Model.EventParticipants.ContainsKey(evt.EventId) && Model.EventParticipants[evt.EventId].Any())
+                                            {
+                                                <div class="mt-3">
+                                                    <strong class="text-muted">Deltagere:</strong>
+                                                    <div class="d-flex flex-wrap gap-2 mt-2">
+                                                        @foreach (var participant in Model.EventParticipants[evt.EventId])
+                                                        {
+                                                            <span class="badge bg-@(participant.Status == "accepted" ? "success" : participant.Status == "declined" ? "danger" : "secondary")">
+                                                                @participant.User?.FirstName @participant.User?.LastName <small>(@participant.User?.Role - @participant.User?.Email)</small>
+                                                                <form method="post" asp-page-handler="RemoveParticipant" style="display:inline;" onsubmit="return confirm('Fjern denne deltager?');">
+                                                                    <input type="hidden" name="eventId" value="@evt.EventId" />
+                                                                    <input type="hidden" name="participantUserId" value="@participant.UserId" />
+                                                                    <button type="submit" class="btn-close btn-close-white" style="font-size: 0.6rem;" aria-label="Fjern"></button>
+                                                                </form>
+                                                            </span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                            
+                                            @* Add participant form - only show if user owns the event *@
+                                            @if (evt.UserId == Model.CurrentUserId)
+                                            {
+                                                <div class="mt-3">
+                                                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addParticipants@(evt.EventId)" aria-expanded="false">
+                                                        <i class="bi bi-person-plus"></i> Tilføj deltagere
+                                                    </button>
+                                                    <div class="collapse mt-2" id="addParticipants@(evt.EventId)">
+                                                    <form method="post" asp-page-handler="AddParticipant">
+                                                        <input type="hidden" name="eventId" value="@evt.EventId" />
+                                                        <div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
+                                                            @{
+                                                                var availableUsers = Model.AllUsers.Where(u => 
+                                                                    !Model.EventParticipants.ContainsKey(evt.EventId) || 
+                                                                    !Model.EventParticipants[evt.EventId].Any(p => p.UserId == u.Uid)
+                                                                ).ToList();
+                                                            }
+                                                            @if (availableUsers.Any())
+                                                            {
+                                                                @foreach (var user in availableUsers)
+                                                                {
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" name="participantUserId" value="@user.Uid" id="event@(evt.EventId)User@(user.Uid)" />
+                                                                        <label class="form-check-label" for="event@(evt.EventId)User@(user.Uid)">
+                                                                            @user.FirstName @user.LastName <small class="text-muted">(@user.Role - @user.Email)</small>
+                                                                        </label>
+                                                                    </div>
+                                                                }
+                                                                <button type="submit" class="btn btn-sm btn-success mt-2 w-100">
+                                                                    <i class="bi bi-check-circle"></i> Tilføj valgte
+                                                                </button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-muted mb-0">Alle brugere er allerede deltagere</p>
+                                                            }
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        }
                                         </div>
-                                        <form method="post" asp-page-handler="DeleteEvent" onsubmit="return confirm('Er du sikker på at du vil slette denne event?');">
-                                            <input type="hidden" name="eventId" value="@evt.EventId" />
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                <i class="bi bi-trash"></i> Slet
-                                            </button>
-                                        </form>
+                                        
+                                        @* Only show delete button if user owns the event *@
+                                        @if (evt.UserId == Model.CurrentUserId)
+                                        {
+                                            <form method="post" asp-page-handler="DeleteEvent" onsubmit="return confirm('Er du sikker på at du vil slette denne event?');">
+                                                <input type="hidden" name="eventId" value="@evt.EventId" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i> Slet
+                                                </button>
+                                            </form>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +189,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">➕ Tilføj Event</h5>
+                    <h5 class="mb-0">Tilføj Event</h5>
                 </div>
                 <div class="card-body">
                     <form method="post" asp-page-handler="CreateEvent">
@@ -155,6 +231,22 @@
                             <label asp-for="NewEvent.IsAllDay" class="form-check-label">
                                 Hele dagen
                             </label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Deltagere</label>
+                            <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                                @foreach (var user in Model.AllUsers)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="SelectedParticipants" value="@user.Uid" id="newEventUser@(user.Uid)" />
+                                        <label class="form-check-label" for="newEventUser@(user.Uid)">
+                                            @user.FirstName @user.LastName <small class="text-muted">(@user.Role - @user.Email)</small>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <small class="form-text text-muted">Vælg deltagere til eventet</small>
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">

@@ -14,6 +14,7 @@ namespace AndenStemesterEksamensProjekt.Data
     public DbSet<Profile> CurrentProfile { get; set; }
     public DbSet<Session> Sessions { get; set; }
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
+    public DbSet<EventParticipant> EventParticipants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

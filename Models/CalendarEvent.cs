@@ -48,8 +48,10 @@ namespace AndenStemesterEksamensProjekt.Models
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation property
+        // Navigation properties
         [ForeignKey("UserId")]
         public User? User { get; set; }
+
+        public ICollection<EventParticipant> Participants { get; set; } = new List<EventParticipant>();
     }
 }

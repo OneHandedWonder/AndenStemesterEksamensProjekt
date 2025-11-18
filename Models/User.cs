@@ -24,6 +24,16 @@ namespace AndenStemesterEksamensProjekt.Models
         [Required]
         [MaxLength(255)]
         public string Email { get; set; } = string.Empty;
+
+        [Column("firstname")]
+        [Required]
+        [MaxLength(255)]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Column("lastname")]
+        [Required]
+        [MaxLength(255)]
+        public string LastName { get; set; } = string.Empty;
         
         [Column("password_hash")]
         [Required]

@@ -2,25 +2,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AndenStemesterEksamensProjekt.Models;
 using AndenStemesterEksamensProjekt.Services;
+using Microsoft.EntityFrameworkCore;
+using AndenStemesterEksamensProjekt.Data;
 
 namespace AndenStemesterEksamensProjekt.Pages.Dashboard
 {
     public class KalenderModel : PageModel
     {
         private readonly EventService _eventService;
+        private readonly ApplicationDbContext _context;
 
-        public KalenderModel(EventService eventService)
+        public KalenderModel(EventService eventService, ApplicationDbContext context)
         {
             _eventService = eventService;
+            _context = context;
         }
 
         public List<CalendarEvent> Events { get; set; } = new();
+        public List<User> AllUsers { get; set; } = new();
+        public Dictionary<int, List<EventParticipant>> EventParticipants { get; set; } = new();
+        public int CurrentUserId { get; set; }
         public int CurrentYear { get; set; }
         public int CurrentMonth { get; set; }
         public string CurrentMonthName { get; set; } = string.Empty;
 
         [BindProperty]
         public CalendarEvent NewEvent { get; set; } = new();
+
+        [BindProperty]
+        public List<int> SelectedParticipants { get; set; } = new();
 
         public string? ErrorMessage { get; set; }
         public string? SuccessMessage { get; set; }
@@ -39,8 +49,21 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
             CurrentMonth = month ?? DateTime.Now.Month;
             CurrentMonthName = new DateTime(CurrentYear, CurrentMonth, 1).ToString("MMMM yyyy");
 
+            // Store current user ID for view
+            CurrentUserId = userId.Value;
+
             // Get events for current month
             Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, CurrentYear, CurrentMonth);
+
+            // Load all users for participant selection
+            AllUsers = await _context.Users.Where(u => u.IsActive).OrderBy(u => u.Email).ToListAsync();
+
+            // Load participants for each event
+            foreach (var evt in Events)
+            {
+                var participants = await _eventService.GetEventParticipantsAsync(evt.EventId);
+                EventParticipants[evt.EventId] = participants;
+            }
 
             return Page();
         }
@@ -71,7 +94,17 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
             try
             {
                 NewEvent.UserId = userId.Value;
-                await _eventService.CreateEventAsync(NewEvent);
+                var createdEvent = await _eventService.CreateEventAsync(NewEvent);
+                
+                // Add selected participants
+                if (SelectedParticipants != null && SelectedParticipants.Any())
+                {
+                    foreach (var participantId in SelectedParticipants)
+                    {
+                        await _eventService.AddParticipantAsync(createdEvent.EventId, participantId, userId.Value);
+                    }
+                }
+                
                 SuccessMessage = "Event oprettet succesfuldt!";
                 
                 // Redirect to refresh the page
@@ -108,6 +141,74 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
             catch (Exception ex)
             {
                 ErrorMessage = $"Fejl ved sletning af event: {ex.Message}";
+            }
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostAddParticipantAsync(int eventId, List<int> participantUserId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToPage("/Login");
+            }
+
+            try
+            {
+                if (participantUserId == null || !participantUserId.Any())
+                {
+                    ErrorMessage = "Vælg mindst én deltager.";
+                    return RedirectToPage();
+                }
+
+                int successCount = 0;
+                foreach (var participantId in participantUserId)
+                {
+                    var success = await _eventService.AddParticipantAsync(eventId, participantId, userId.Value);
+                    if (success) successCount++;
+                }
+
+                if (successCount > 0)
+                {
+                    SuccessMessage = $"{successCount} deltager{(successCount > 1 ? "e" : "")} tilføjet succesfuldt!";
+                }
+                else
+                {
+                    ErrorMessage = "Kunne ikke tilføje nogen deltagere.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Fejl ved tilføjelse af deltagere: {ex.Message}";
+            }
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostRemoveParticipantAsync(int eventId, int participantUserId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToPage("/Login");
+            }
+
+            try
+            {
+                var success = await _eventService.RemoveParticipantAsync(eventId, participantUserId);
+                if (success)
+                {
+                    SuccessMessage = "Deltager fjernet succesfuldt!";
+                }
+                else
+                {
+                    ErrorMessage = "Kunne ikke fjerne deltager.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Fejl ved fjernelse af deltager: {ex.Message}";
             }
 
             return RedirectToPage();
