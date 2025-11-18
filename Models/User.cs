@@ -3,6 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AndenStemesterEksamensProjekt.Models
 {
+    public enum UserRole
+    {
+        Guest,
+        Student,
+        Lecturer,
+        Planner,
+        Censor,
+        Admin
+    }
+
     [Table("users")]
     public class User
     {
@@ -33,7 +43,14 @@ namespace AndenStemesterEksamensProjekt.Models
 
         [Column("role")]
         [MaxLength(50)]
-        public string Role { get; set; } = string.Empty;
+        public string Role { get; set; } = "guest";
 
+        // Helper property for type-safe role access
+        [NotMapped]
+        public UserRole RoleEnum
+        {
+            get => Enum.TryParse<UserRole>(Role, true, out var role) ? role : UserRole.Guest;
+            set => Role = value.ToString().ToLower();
+        }
     }
 }

@@ -14,7 +14,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE,
-    role VARCHAR(50) DEFAULT 'guest'
+    role VARCHAR(50) DEFAULT 'guest' CHECK (role IN ('guest', 'student', 'lecturer', 'planner', 'censor', 'admin'))
 );
 
 -- Create index on email for faster lookups
@@ -26,8 +26,8 @@ CREATE INDEX IF NOT EXISTS idx_users_active ON users(is_active);
 -- Insert a test user
 -- Email: test@example.com  
 -- Password: password123
-INSERT INTO users (email, password_hash) 
-VALUES ('test@example.com', '$2a$12$SPDmr7PZip/M2r8KVZk/veE4GHkWUkJsho93T1K9n2ox4isAd2e1e') -- Hash for pw.
+INSERT INTO users (email, password_hash, role) 
+VALUES ('test@example.com', '$2a$12$SPDmr7PZip/M2r8KVZk/veE4GHkWUkJsho93T1K9n2ox4isAd2e1e', 'admin') -- Hash for pw.
 ON CONFLICT (email) DO NOTHING;
 
 -- Display created table
