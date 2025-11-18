@@ -20,8 +20,9 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register database service
+// Register services
 builder.Services.AddScoped<DatabaseService>();
+builder.Services.AddScoped<EventService>();
 
 var app = builder.Build();
 

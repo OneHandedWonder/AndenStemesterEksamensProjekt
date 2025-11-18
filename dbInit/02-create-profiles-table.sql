@@ -1,8 +1,8 @@
 ﻿-- Drop table if it exists (for development purposes)
-DROP TABLE IF EXISTS profiles;
+DROP TABLE IF EXISTS profiles CASCADE;
 
 -- Create profiles table
-CREATE TABLE IF NOT EXISTS profiles (
+CREATE TABLE profiles (
     puid INTEGER PRIMARY KEY,
     navn VARCHAR(255) NOT NULL,
     adresse VARCHAR(500),

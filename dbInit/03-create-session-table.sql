@@ -1,4 +1,8 @@
-CREATE TABLE IF NOT EXISTS sessions (
+-- Drop table if it exists (for development purposes)
+DROP TABLE IF EXISTS sessions CASCADE;
+
+-- Create sessions table
+CREATE TABLE sessions (
     session_id SERIAL PRIMARY KEY,
     uid INT NOT NULL,
     session_token CHAR(32) NOT NULL,

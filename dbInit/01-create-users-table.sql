@@ -1,8 +1,12 @@
 -- Drop table if it exists (for development purposes)
-DROP TABLE IF EXISTS users;
+-- CASCADE ensures dependent tables are also dropped
+DROP TABLE IF EXISTS calendar_events CASCADE;
+DROP TABLE IF EXISTS sessions CASCADE;
+DROP TABLE IF EXISTS profiles CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 -- Create users table
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
     uid SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
