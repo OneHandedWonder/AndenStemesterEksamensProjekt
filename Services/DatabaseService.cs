@@ -71,6 +71,18 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
+        /// Get all teams for a user
+        /// </summary>
+        public async Task<List<Team>> GetUserTeamsAsync(int userId)
+        {
+            return await _context.UserTeams
+                .Where(ut => ut.UserId == userId)
+                .Include(ut => ut.Team)
+                .Select(ut => ut.Team)
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Create a new session with a random token
         /// </summary>
         public async Task<string> CreateSessionAsync(int uid, int expirationDays = 30)

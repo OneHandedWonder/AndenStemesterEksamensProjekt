@@ -55,6 +55,9 @@ namespace AndenStemesterEksamensProjekt.Models
         [MaxLength(50)]
         public string Role { get; set; } = "guest";
 
+        // Navigation property for teams
+        public ICollection<UserTeam> UserTeams { get; set; } = new List<UserTeam>();
+
         // Helper property for type-safe role access
         [NotMapped]
         public UserRole RoleEnum

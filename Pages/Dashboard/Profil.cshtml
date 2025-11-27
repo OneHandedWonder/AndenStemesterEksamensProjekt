@@ -28,3 +28,32 @@ else
         <a href="/Profile/Create" class="btn btn-primary">Opret profil</a>
     </div>
 }
+<div class="mt-4">
+    <h2>Mine Hold</h2>
+    @if (Model.CurrentUser?.Role == "planner")
+    {
+        <a href="/Teams/Create" class="btn btn-success mb-3">Opret nyt hold</a>
+        <a href="/Teams/Manage" class="btn btn-secondary mb-3 ms-2">Administrer hold</a>
+    }
+
+    @if (Model.Teams.Any())
+    {
+        <div class="list-group">
+            @foreach (var team in Model.Teams)
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">@team.Name</h5>
+                    @if (!string.IsNullOrEmpty(team.Description))
+                    {
+                        <p class="mb-1 text-muted">@team.Description</p>
+                    }
+                    <small class="text-muted">Oprettet: @team.CreatedAt.ToString("dd/MM/yyyy")</small>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">Du er ikke medlem af nogen hold endnu.</p>
+    }
+</div>

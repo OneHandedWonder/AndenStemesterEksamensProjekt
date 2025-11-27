@@ -12,6 +12,7 @@ public class DashboardModel : PageModel
     public int? userId { get; set; }
     public User? CurrentUser { get; set; }
     public Profile? CurrentProfile { get; set; }
+    public List<Team> Teams { get; set; } = new();
 
     public DashboardModel(DatabaseService dbService, ILogger<DashboardModel> logger)
     {
@@ -38,6 +39,9 @@ public class DashboardModel : PageModel
         }
 
         CurrentProfile = await _dbService.GetprofileAsync(userId.Value);
+        
+        // Load user teams
+        Teams = await _dbService.GetUserTeamsAsync(userId.Value);
 
         return Page();
     }
