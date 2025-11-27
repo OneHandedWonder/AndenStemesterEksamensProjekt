@@ -11,6 +11,7 @@ CREATE TABLE calendar_events (
     end_time TIMESTAMP NOT NULL,
     location VARCHAR(200),
     is_all_day BOOLEAN DEFAULT FALSE,
+    type VARCHAR(50) DEFAULT 'written' CHECK (type IN ('written', 'oral', 'oral+written', 'project')),
     color VARCHAR(7) DEFAULT '#3788d8',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

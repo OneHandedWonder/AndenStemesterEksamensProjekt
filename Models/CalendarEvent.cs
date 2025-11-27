@@ -38,6 +38,10 @@ namespace AndenStemesterEksamensProjekt.Models
         [Column("is_all_day")]
         public bool IsAllDay { get; set; } = false;
 
+        [Column("type")]
+        [MaxLength(50)]
+        public string Type { get; set; } = "written";
+
         [Column("color")]
         [MaxLength(7)]
         public string Color { get; set; } = "#3788d8";

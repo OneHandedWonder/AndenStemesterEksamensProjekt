@@ -84,6 +84,30 @@
                                                     <span>@evt.StartTime.ToString("dd/MM/yyyy HH:mm") - @evt.EndTime.ToString("HH:mm")</span>
                                                 }
                                             </p>
+                                            @if (!string.IsNullOrEmpty(evt.Type))
+                                            {
+                                                <p class="text-muted mb-2">
+                                                    <i class="bi bi-file-text"></i>
+                                                    @switch(evt.Type)
+                                                    {
+                                                        case "written":
+                                                            <span>Skriftlig eksamen</span>
+                                                            break;
+                                                        case "oral":
+                                                            <span>Mundtlig eksamen</span>
+                                                            break;
+                                                        case "oral+written":
+                                                            <span>Mundtlig + Skriftlig eksamen</span>
+                                                            break;
+                                                        case "project":
+                                                            <span>Projekt</span>
+                                                            break;
+                                                        default:
+                                                            <span>@evt.Type</span>
+                                                            break;
+                                                    }
+                                                </p>
+                                            }
                                             @if (!string.IsNullOrEmpty(evt.Location))
                                             {
                                                 <p class="text-muted mb-2">
@@ -204,6 +228,17 @@
                         <div class="mb-3">
                             <label asp-for="NewEvent.Description" class="form-label">Beskrivelse</label>
                             <textarea asp-for="NewEvent.Description" class="form-control" rows="3" placeholder="Valgfri beskrivelse"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewEvent.Type" class="form-label">Eksamenstype *</label>
+                            <select asp-for="NewEvent.Type" class="form-select" required>
+                                <option value="written">Skriftlig</option>
+                                <option value="oral">Mundtlig</option>
+                                <option value="oral+written">Mundtlig + Skriftlig</option>
+                                <option value="project">Projekt</option>
+                            </select>
+                            <span asp-validation-for="NewEvent.Type" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
