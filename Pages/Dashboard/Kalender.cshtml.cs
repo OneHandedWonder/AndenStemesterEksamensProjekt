@@ -11,15 +11,19 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
     {
         private readonly EventService _eventService;
         private readonly ApplicationDbContext _context;
+        private readonly TeamService _teamService;
 
-        public KalenderModel(EventService eventService, ApplicationDbContext context)
+        public KalenderModel(EventService eventService, ApplicationDbContext context, TeamService teamService)
         {
             _eventService = eventService;
             _context = context;
+            _teamService = teamService;
         }
 
         public List<CalendarEvent> Events { get; set; } = new();
         public List<User> AllUsers { get; set; } = new();
+
+        public List<Team> AllTeams { get; set; } = new();
         public Dictionary<int, List<EventParticipant>> EventParticipants { get; set; } = new();
         public int CurrentUserId { get; set; }
         public string CurrentUserRole { get; set; } = string.Empty;
@@ -32,6 +36,9 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
 
         [BindProperty]
         public List<int> SelectedParticipants { get; set; } = new();
+
+        [BindProperty]
+        public List<int> SelectedTeams { get; set; } = new();
 
         public string? ErrorMessage { get; set; }
         public string? SuccessMessage { get; set; }
@@ -68,6 +75,9 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
 
             // Load all users for participant selection
             AllUsers = await _context.Users.Where(u => u.IsActive).OrderBy(u => u.Email).ToListAsync();
+
+            // Load all teams for team selection
+            AllTeams = await _teamService.GetAllTeamsAsync();
 
             // Load participants for each event
             foreach (var evt in Events)
@@ -116,6 +126,7 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
                 
                 Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, CurrentYear, CurrentMonth);
                 AllUsers = await _context.Users.Where(u => u.IsActive).OrderBy(u => u.Email).ToListAsync();
+                AllTeams = await _teamService.GetAllTeamsAsync();
                 
                 // Load participants for each event
                 foreach (var evt in Events)
@@ -160,6 +171,7 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
                 
                 Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, CurrentYear, CurrentMonth);
                 AllUsers = await _context.Users.Where(u => u.IsActive).OrderBy(u => u.Email).ToListAsync();
+                AllTeams = await _teamService.GetAllTeamsAsync();
                 
                 // Load participants for each event
                 foreach (var evt in Events)
@@ -176,10 +188,26 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
                 NewEvent.UserId = userId.Value;
                 var createdEvent = await _eventService.CreateEventAsync(NewEvent);
                 
-                // Add selected participants
-                if (SelectedParticipants != null && SelectedParticipants.Any())
+                // Collect all participant IDs from both individual users and teams
+                var allParticipantIds = new HashSet<int>(SelectedParticipants ?? new List<int>());
+
+                // Add members from selected teams
+                if (SelectedTeams != null && SelectedTeams.Any())
                 {
-                    foreach (var participantId in SelectedParticipants)
+                    foreach (var teamId in SelectedTeams)
+                    {
+                        var teamMembers = await _teamService.GetTeamMembersAsync(teamId);
+                        foreach (var member in teamMembers)
+                        {
+                            allParticipantIds.Add(member.Uid);
+                        }
+                    }
+                }
+
+                // Add all participants to the event
+                if (allParticipantIds.Any())
+                {
+                    foreach (var participantId in allParticipantIds)
                     {
                         await _eventService.AddParticipantAsync(createdEvent.EventId, participantId, userId.Value);
                     }

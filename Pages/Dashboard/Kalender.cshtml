@@ -286,12 +286,36 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="SelectedParticipants" value="@user.Uid" id="newEventUser@(user.Uid)" />
                                         <label class="form-check-label" for="newEventUser@(user.Uid)">
-                                            @user.FirstName @user.LastName <small class="text-muted">(@user.Role - @user.Email)</small>
+                                            <i class="bi bi-person"></i> @user.FirstName @user.LastName <small class="text-muted">(@user.Role - @user.Email)</small>
                                         </label>
                                     </div>
                                 }
                             </div>
-                            <small class="form-text text-muted">Vælg deltagere til eventet</small>
+                            <small class="form-text text-muted">Vælg individuelle deltagere til eventet</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Hold</label>
+                            <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                                @if (Model.AllTeams.Any())
+                                {
+                                    @foreach (var team in Model.AllTeams)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="SelectedTeams" value="@team.Id" id="newEventTeam@(team.Id)" />
+                                            <label class="form-check-label" for="newEventTeam@(team.Id)">
+                                                <i class="bi bi-people-fill text-primary"></i> @team.Name 
+                                                <small class="text-muted">(@team.UserTeams.Count medlemmer)</small>
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted mb-0">Ingen hold tilgængelige</p>
+                                }
+                            </div>
+                            <small class="form-text text-muted">Vælg hold - alle medlemmer vil blive tilføjet</small>
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">

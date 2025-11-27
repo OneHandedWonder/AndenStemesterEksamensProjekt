@@ -1,0 +1,96 @@
+@page
+@model AndenStemesterEksamensProjekt.Pages.Teams.DetailsModel
+@{
+    ViewData["Title"] = "Hold Detaljer";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-people-fill"></i> @Model.Team.Name
+                        </h4>
+                        <div>
+                            @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
+                            {
+                                <a asp-page="/Teams/Edit" asp-route-id="@Model.Team.Id" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Rediger
+                                </a>
+                            }
+                            <a asp-page="/Teams/Manage" class="btn btn-light btn-sm">
+                                <i class="bi bi-arrow-left"></i> Tilbage
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.Team.Description))
+                    {
+                        <div class="mb-4">
+                            <h5>Beskrivelse</h5>
+                            <p class="text-muted">@Model.Team.Description</p>
+                        </div>
+                    }
+
+                    <div class="mb-4">
+                        <h5>
+                            <i class="bi bi-person"></i> Medlemmer (@Model.Members.Count)
+                        </h5>
+                        
+                        @if (Model.Members.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Navn</th>
+                                            <th>Email</th>
+                                            <th>Rolle</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var member in Model.Members)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <i class="bi bi-person-circle text-primary"></i>
+                                                    @member.FirstName @member.LastName
+                                                </td>
+                                                <td>@member.Email</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">@member.Role</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> Dette hold har ingen medlemmer endnu.
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <small class="text-muted">
+                                <i class="bi bi-calendar-plus"></i> Oprettet: @Model.Team.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </small>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <small class="text-muted">
+                                <i class="bi bi-calendar-check"></i> Opdateret: @Model.Team.UpdatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

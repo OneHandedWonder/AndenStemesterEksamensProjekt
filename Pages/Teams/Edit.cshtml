@@ -1,0 +1,82 @@
+@page
+@model AndenStemesterEksamensProjekt.Pages.Teams.EditModel
+@{
+    ViewData["Title"] = "Rediger Hold";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil"></i> Rediger Hold
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form method="post">
+                        <input type="hidden" asp-for="TeamId" />
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Hold Navn *</label>
+                            <input asp-for="Name" class="form-control" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Beskrivelse</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Medlemmer</label>
+                            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                @if (Model.AllUsers.Any())
+                                {
+                                    @foreach (var user in Model.AllUsers)
+                                    {
+                                        var isChecked = Model.CurrentMemberIds.Contains(user.Uid);
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="SelectedMembers" 
+                                                   value="@user.Uid" id="user@(user.Uid)" 
+                                                   @(isChecked ? "checked" : "") />
+                                            <label class="form-check-label" for="user@(user.Uid)">
+                                                @user.FirstName @user.LastName <small class="text-muted">(@user.Role - @user.Email)</small>
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted mb-0">Ingen brugere tilgængelige</p>
+                                }
+                            </div>
+                            <small class="form-text text-muted">Vælg eller fravælg medlemmer</small>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-circle"></i> Gem Ændringer
+                            </button>
+                            <a asp-page="/Teams/Manage" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Annuller
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

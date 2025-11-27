@@ -47,6 +47,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Kalender">Oversigt</a>
                             </li>
                         }
+                        @if (Context.Session.GetInt32("UserId") != null && (Context.Session.GetString("UserRole") == "Planner" || Context.Session.GetString("UserRole") == "Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Teams/Manage">Hold</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

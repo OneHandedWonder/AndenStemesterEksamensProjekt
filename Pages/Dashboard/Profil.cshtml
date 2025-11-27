@@ -30,7 +30,7 @@ else
 }
 <div class="mt-4">
     <h2>Mine Hold</h2>
-    @if (Model.CurrentUser?.Role == "planner")
+    @if (Model.CurrentUser?.Role == "planner" || Model.CurrentUser?.Role == "admin")
     {
         <a href="/Teams/Create" class="btn btn-success mb-3">Opret nyt hold</a>
         <a href="/Teams/Manage" class="btn btn-secondary mb-3 ms-2">Administrer hold</a>

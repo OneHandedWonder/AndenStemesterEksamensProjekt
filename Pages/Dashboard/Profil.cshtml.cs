@@ -45,5 +45,9 @@ public class DashboardModel : PageModel
 
         return Page();
     }
+    public async Task<IActionResult> OnPostManageTeams()
+    {
+        return RedirectToPage("/Teams/Manage");
+    }
 }
 

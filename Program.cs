@@ -23,6 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register services
 builder.Services.AddScoped<DatabaseService>();
 builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<TeamService>();
 
 var app = builder.Build();
 

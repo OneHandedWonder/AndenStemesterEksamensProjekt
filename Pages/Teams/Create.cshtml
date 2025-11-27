@@ -1,0 +1,77 @@
+@page
+@model AndenStemesterEksamensProjekt.Pages.Teams.CreateModel
+@{
+    ViewData["Title"] = "Opret Hold";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Opret Nyt Hold
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Hold Navn *</label>
+                            <input asp-for="Name" class="form-control" placeholder="F.eks. Team Alpha" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Beskrivelse</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Valgfri beskrivelse af holdet"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Vælg Medlemmer</label>
+                            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                @if (Model.AllUsers.Any())
+                                {
+                                    @foreach (var user in Model.AllUsers)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="SelectedMembers" value="@user.Uid" id="user@(user.Uid)" />
+                                            <label class="form-check-label" for="user@(user.Uid)">
+                                                @user.FirstName @user.LastName <small class="text-muted">(@user.Role - @user.Email)</small>
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted mb-0">Ingen brugere tilgængelige</p>
+                                }
+                            </div>
+                            <small class="form-text text-muted">Vælg de brugere der skal være medlemmer af holdet</small>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Opret Hold
+                            </button>
+                            <a asp-page="/Teams/Manage" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Annuller
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
