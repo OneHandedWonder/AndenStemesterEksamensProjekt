@@ -217,5 +217,29 @@ namespace AndenStemesterEksamensProjekt.Services
                 .OrderBy(e => e.StartTime)
                 .ToListAsync();
         }
+        /// <summary>
+        /// Get overlapping events for given participants
+        /// </summary>
+        public async Task<List<CalendarEvent>> GetOverlappingEventsAsync(CalendarEvent newEvent, List<int> participantIds)
+        {
+            var overlappingEvents = new List<CalendarEvent>();
+
+            foreach (var participantId in participantIds)
+            {
+                var participantEventIds = await _context.EventParticipants
+                    .Where(ep => ep.UserId == participantId)
+                    .Select(ep => ep.EventId)
+                    .ToListAsync();
+
+                var events = await _context.CalendarEvents
+                    .Where(e => participantEventIds.Contains(e.EventId) &&
+                                ((newEvent.StartTime < e.EndTime) && (newEvent.EndTime > e.StartTime)))
+                    .ToListAsync();
+
+                overlappingEvents.AddRange(events);
+            }
+
+            return overlappingEvents.Distinct().ToList();
+        }
     }
 }

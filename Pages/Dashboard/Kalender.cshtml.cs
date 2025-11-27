@@ -35,6 +35,7 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
 
         public string? ErrorMessage { get; set; }
         public string? SuccessMessage { get; set; }
+        public string? InlineErrorMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? year, int? month)
         {
@@ -105,8 +106,68 @@ namespace AndenStemesterEksamensProjekt.Pages.Dashboard
             // Validate end time is after start time
             if (NewEvent.EndTime <= NewEvent.StartTime)
             {
-                ErrorMessage = "Sluttidspunkt skal være efter starttidspunkt.";
-                Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, DateTime.Now.Year, DateTime.Now.Month);
+                InlineErrorMessage = "Sluttidspunkt skal være efter starttidspunkt.";
+                // Reload page data
+                CurrentYear = NewEvent.StartTime.Year;
+                CurrentMonth = NewEvent.StartTime.Month;
+                CurrentMonthName = new DateTime(CurrentYear, CurrentMonth, 1).ToString("MMMM yyyy");
+                CurrentUserId = userId.Value;
+                CurrentUserRole = userRole ?? string.Empty;
+                
+                Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, CurrentYear, CurrentMonth);
+                AllUsers = await _context.Users.Where(u => u.IsActive).OrderBy(u => u.Email).ToListAsync();
+                
+                // Load participants for each event
+                foreach (var evt in Events)
+                {
+                    var participants = await _eventService.GetEventParticipantsAsync(evt.EventId);
+                    EventParticipants[evt.EventId] = participants;
+                }
+                
+                return Page();
+            }
+            // Validate that event is not overlapping with existing events for any participant
+            var overlappingEvents = await _eventService.GetOverlappingEventsAsync(NewEvent, SelectedParticipants);
+            if (overlappingEvents.Count > 0)
+            {
+                // Get participants from overlapping events who are also in the selected participants list
+                var overlappingParticipantIds = new HashSet<int>();
+                foreach (var evt in overlappingEvents)
+                {
+                    var participants = await _eventService.GetEventParticipantsAsync(evt.EventId);
+                    foreach (var participant in participants)
+                    {
+                        if (SelectedParticipants.Contains(participant.UserId))
+                        {
+                            overlappingParticipantIds.Add(participant.UserId);
+                        }
+                    }
+                }
+                var overlappingUsers = await _context.Users
+                    .Where(u => overlappingParticipantIds.Contains(u.Uid))
+                    .Select(u => $"{u.FirstName} {u.LastName} ({u.Email})")
+                    .ToListAsync();
+                    
+                InlineErrorMessage = $"Event overlapper med eksisterende eksaminer for: {string.Join(", ", overlappingUsers)}";
+                Services.Diag_logService.Log($"Overlap detected in KalenderModel.OnPostCreateEventAsync for users: {string.Join(", ", overlappingUsers)}");
+                
+                // Reload page data
+                CurrentYear = NewEvent.StartTime.Year;
+                CurrentMonth = NewEvent.StartTime.Month;
+                CurrentMonthName = new DateTime(CurrentYear, CurrentMonth, 1).ToString("MMMM yyyy");
+                CurrentUserId = userId.Value;
+                CurrentUserRole = userRole ?? string.Empty;
+                
+                Events = await _eventService.GetCurrentMonthEventsAsync(userId.Value, CurrentYear, CurrentMonth);
+                AllUsers = await _context.Users.Where(u => u.IsActive).OrderBy(u => u.Email).ToListAsync();
+                
+                // Load participants for each event
+                foreach (var evt in Events)
+                {
+                    var participants = await _eventService.GetEventParticipantsAsync(evt.EventId);
+                    EventParticipants[evt.EventId] = participants;
+                }
+                
                 return Page();
             }
 
