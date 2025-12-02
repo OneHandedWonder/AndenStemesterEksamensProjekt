@@ -132,7 +132,10 @@
                                                                 <form method="post" asp-page-handler="RemoveParticipant" style="display:inline;" onsubmit="return confirm('Fjern denne deltager?');">
                                                                     <input type="hidden" name="eventId" value="@evt.EventId" />
                                                                     <input type="hidden" name="participantUserId" value="@participant.UserId" />
-                                                                    <button type="submit" class="btn-close btn-close-white" style="font-size: 0.6rem;" aria-label="Fjern"></button>
+                                                                    @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
+                                                                    {
+                                                                        <button type="submit" class="btn-close btn-close-white" style="font-size: 0.6rem;" aria-label="Fjern"></button>
+                                                                    }
                                                                 </form>
                                                             </span>
                                                         }
