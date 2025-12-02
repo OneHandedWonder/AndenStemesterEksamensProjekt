@@ -23,13 +23,23 @@ namespace AndenStemesterEksamensProjekt.Models
         [MaxLength(1000)]
         public string? Description { get; set; }
 
+        [Column("submission_time")]
+        [Required]
+
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH\\:mm}", ApplyFormatInEditMode = true)]
+        public DateTime SubmissionTime { get; set; } = DateTime.UtcNow;
+
         [Column("start_time")]
         [Required]
-        public DateTime StartTime { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH\\:mm}", ApplyFormatInEditMode = true)]
+        public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
         [Column("end_time")]
         [Required]
-        public DateTime EndTime { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH\\:mm}", ApplyFormatInEditMode = true)]
+        public DateTime EndTime { get; set; } = DateTime.UtcNow.AddHours(1);
 
         [Column("location")]
         [MaxLength(200)]

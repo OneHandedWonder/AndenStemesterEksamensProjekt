@@ -7,6 +7,7 @@ CREATE TABLE calendar_events (
     user_id INTEGER NOT NULL,
     title VARCHAR(200) NOT NULL,
     description VARCHAR(1000),
+    submission_time TIMESTAMP NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     location VARCHAR(200),
