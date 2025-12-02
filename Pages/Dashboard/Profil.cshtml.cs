@@ -47,6 +47,7 @@ public class DashboardModel : PageModel
     }
     public async Task<IActionResult> OnPostManageTeams()
     {
+        await Task.CompletedTask;
         return RedirectToPage("/Teams/Manage");
     }
 }
