@@ -13,7 +13,7 @@
             {
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     @Model.SuccessMessage
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
 
@@ -21,7 +21,7 @@
             {
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     @Model.ErrorMessage
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
         </div>
@@ -199,9 +199,9 @@
                                         @* Only show delete button if user is planner or admin *@
                                         @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
                                         {
-                                            <form method="post" asp-page-handler="DeleteEvent" onsubmit="return confirm('Er du sikker på at du vil slette denne event?');">
+                                            <form method="post" asp-page-handler="DeleteEvent" onsubmit="return confirm('Er du sikker på at du vil slette dette event?');">
                                                 <input type="hidden" name="eventId" value="@evt.EventId" />
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="bi bi-trash"></i> Slet
                                                 </button>
                                             </form>
@@ -276,7 +276,7 @@
                         {
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 @Model.InlineErrorMessage
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         }
 

@@ -33,7 +33,7 @@ else
     @if (Model.CurrentUser?.Role == "planner" || Model.CurrentUser?.Role == "admin")
     {
         <a href="/Teams/Create" class="btn btn-success mb-3">Opret nyt hold</a>
-        <a href="/Teams/Manage" class="btn btn-secondary mb-3 ms-2">Administrer hold</a>
+        <a href="/Teams/Manage" class="btn btn-success mb-3 ms-2">Administrer hold</a>
     }
 
     @if (Model.Teams.Any())

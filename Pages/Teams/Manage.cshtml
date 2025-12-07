@@ -23,7 +23,7 @@
             {
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     @TempData["SuccessMessage"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
 
@@ -31,7 +31,7 @@
             {
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     @TempData["ErrorMessage"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
 
@@ -72,7 +72,7 @@
                                             <form method="post" asp-page-handler="Delete" asp-route-teamId="@team.Id" 
                                                   style="display:inline;" 
                                                   onsubmit="return confirm('Er du sikker på at du vil slette dette hold? Alle medlemmer vil blive fjernet.');">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="bi bi-trash"></i> Slet
                                                 </button>
                                             </form>
@@ -94,7 +94,7 @@
                     <p class="mt-3 text-muted">Ingen hold oprettet endnu.</p>
                     @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
                     {
-                        <a asp-page="/Teams/Create" class="btn btn-primary mt-2">
+                        <a asp-page="/Teams/Create" class="btn btn-success mt-2">
                             <i class="bi bi-plus-circle"></i> Opret Dit Første Hold
                         </a>
                     }
