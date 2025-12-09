@@ -1,7 +1,7 @@
 @page
 @model AndenStemesterEksamensProjekt.Pages.Dashboard.KalenderModel
 @{
-    ViewData["Title"] = "Min Oversigt";
+    ViewData["Title"] = "Eksamens Oversigt";
 }
 
 <div class="container mt-4">
@@ -35,19 +35,18 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="?year=@(Model.CurrentMonth == 1 ? Model.CurrentYear - 1 : Model.CurrentYear)&month=@(Model.CurrentMonth == 1 ? 12 : Model.CurrentMonth - 1)" 
                            class="btn btn-outline-primary">
-                            ◀ Forrige måned
+                            Forrige måned
                         </a>
                         <h4 class="mb-0">@Model.CurrentMonthName</h4>
                         <a href="?year=@(Model.CurrentMonth == 12 ? Model.CurrentYear + 1 : Model.CurrentYear)&month=@(Model.CurrentMonth == 12 ? 1 : Model.CurrentMonth + 1)" 
                            class="btn btn-outline-primary">
-                            Næste måned ▶
+                            Næste måned
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <!-- Events List -->
         <div class="col-md-8">

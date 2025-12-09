@@ -20,21 +20,15 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        @if (Context.Session.GetString ("UserRole") == null)
+                        {
+
+                        } else {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Forside</a>
                         </li>
-                        @if (Context.Session.GetInt32("UserId") == null)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/login">Login</a>
-                            </li>
                         }
-                        @if (Context.Session.GetInt32("UserId") != null)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/logout">Log ud</a>
-                            </li>
-                        }
+
                         @if (Context.Session.GetInt32("UserId") != null && Context.Session.GetString("UserRole") != "guest")
                         {
                             <li class="nav-item">
@@ -44,7 +38,7 @@
                         @if (Context.Session.GetInt32("UserId") != null && Context.Session.GetString("UserRole") != "guest")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Kalender">Oversigt</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Kalender">Eksamens Oversigt</a>
                             </li>
                         }
                         @if (Context.Session.GetInt32("UserId") != null && (Context.Session.GetString("UserRole") == "Planner" || Context.Session.GetString("UserRole") == "Admin"))
@@ -54,6 +48,22 @@
                             </li>
                         }
                     </ul>
+                    @if (Context.Session.GetInt32("UserId") == null)
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/login">Login</a>
+                            </li>
+                        </ul>
+                    }
+                    @if (Context.Session.GetInt32("UserId") != null)
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/logout">Log ud</a>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>
