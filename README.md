@@ -45,9 +45,3 @@ Windows: `.\dbConf.ps1 -Force`
 Linux/macOS: `./dbConf.sh --force`
 
 Du kan også kombinere flags: `.\dbConf.ps1 -Reinit -Force`
-
-## Tilføj dine SQL scripts
-Placer dine .sql filer i `dbInit/` mappen. De køres automatisk i alfabetisk rækkefølge, så navngiv dem fx:
-- `01-create-tables.sql`
-- `02-insert-data.sql`
-- `03-create-views.sql`

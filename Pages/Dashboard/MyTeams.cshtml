@@ -49,7 +49,7 @@
                                         <small class="text-muted">
                                             <i class="bi bi-calendar"></i> Oprettet: @team.CreatedAt.ToString("dd/MM/yyyy")
                                         </small>
-                                        <a asp-page="/Teams/Details" asp-route-id="@team.Id" class="btn btn-sm btn-outline-primary">
+                                        <a asp-page="/Teams/Details" asp-route-id="@team.Id" class="btn btn-sm btn-primary">
                                             Se detaljer
                                         </a>
                                     </div>
@@ -67,7 +67,7 @@
             }
             
             <div class="mt-4">
-                <a asp-page="/Dashboard/Profil" class="btn btn-secondary">
+                <a asp-page="/Dashboard/Profil" class="btn btn-success">
                     <i class="bi bi-arrow-left"></i> Tilbage til Profil
                 </a>
             </div>
