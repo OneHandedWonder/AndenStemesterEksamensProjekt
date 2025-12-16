@@ -6,39 +6,41 @@
     <title>@ViewData["Title"] - Zealand Eksamens Oversigt</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AndenStemesterEksamensProjekt.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/AndenStemesterEksamensProjekt.styles.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Zealand Eksamens Oversigt</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    <img src="~/images/Zealand_logo_black_RGB_1600px_72dpi.png" alt="Zealand Logo" style="height: 40px;" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-items-center">
                     <ul class="navbar-nav flex-grow-1">
                         @if (Context.Session.GetString ("UserRole") == null)
                         {
 
                         } else {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Forside</a>
+                            <a class="btn btn-outline-dark mx-1" asp-area="" asp-page="/Index">Forside</a>
                         </li>
                         }
 
                         @if (Context.Session.GetInt32("UserId") != null && Context.Session.GetString("UserRole") != "guest")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Dashboard/Kalender">Eksamens Oversigt</a>
+                                <a class="btn btn-outline-dark mx-1" asp-area="" asp-page="/Dashboard/Kalender">Eksamens Oversigt</a>
                             </li>
                         }
                         @if (Context.Session.GetInt32("UserId") != null && (Context.Session.GetString("UserRole") == "Planner" || Context.Session.GetString("UserRole") == "Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Teams/Manage">Hold</a>
+                                <a class="btn btn-outline-dark mx-1" asp-area="" asp-page="/Teams/Manage">Hold</a>
                             </li>
                         }
                     </ul>
@@ -46,7 +48,7 @@
                     {
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/login">Login</a>
+                                <a class="btn btn-dark" asp-area="" asp-page="/login">Login</a>
                             </li>
                         </ul>
                     }
@@ -54,7 +56,7 @@
                     {
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="btn btn-outline-dark dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     @Context.Session.GetString("UserEmail")
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -85,7 +87,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

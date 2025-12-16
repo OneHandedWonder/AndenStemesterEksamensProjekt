@@ -52,7 +52,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Events i @Model.CurrentMonthName</h5>
+                    <h5 class="mb-0">Eksaminer i @Model.CurrentMonthName</h5>
                 </div>
                 <div class="card-body" style="max-height: 600px; overflow-y: auto;">
                     @if (Model.Events.Any())
@@ -156,13 +156,13 @@
                                             @if (Model.CurrentUserRole == "planner" || Model.CurrentUserRole == "admin")
                                             {
                                                 <div class="mt-3">
-                                                    <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addParticipants@(evt.EventId)" aria-expanded="false">
+                                                    <button class="btn btn-sm btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#addParticipants@(evt.EventId)" aria-expanded="false">
                                                         <i class="bi bi-person-plus"></i> Tilføj deltagere
                                                     </button>
                                                     <div class="collapse mt-2" id="addParticipants@(evt.EventId)">
                                                     <form method="post" asp-page-handler="AddParticipant">
                                                         <input type="hidden" name="eventId" value="@evt.EventId" />
-                                                        <div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
+                                                        <div class="border rounded p-2 mb-2" style="max-height: 150px; overflow-y: auto;">
                                                             @{
                                                                 var availableUsers = Model.AllUsers.Where(u => 
                                                                     !Model.EventParticipants.ContainsKey(evt.EventId) || 
@@ -180,15 +180,18 @@
                                                                         </label>
                                                                     </div>
                                                                 }
-                                                                <button type="submit" class="btn btn-sm btn-success mt-2 w-100">
-                                                                    <i class="bi bi-check-circle"></i> Tilføj valgte
-                                                                </button>
                                                             }
                                                             else
                                                             {
                                                                 <p class="text-muted mb-0">Alle brugere er allerede deltagere</p>
                                                             }
                                                         </div>
+                                                        @if (availableUsers.Any())
+                                                        {
+                                                            <button type="submit" class="btn btn-success w-100">
+                                                                <i class="bi bi-check-circle"></i> Tilføj valgte deltagere
+                                                            </button>
+                                                        }
                                                     </form>
                                                 </div>
                                             </div>
@@ -214,7 +217,7 @@
                     {
                         <div class="text-center py-5 text-muted">
                             <i class="bi bi-calendar-x" style="font-size: 3rem;"></i>
-                            <p class="mt-3">Ingen events i denne måned</p>
+                            <p class="mt-3">Ingen Eksaminer i denne måned</p>
                         </div>
                     }
                 </div>
@@ -227,7 +230,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Tilføj Event</h5>
+                        <h5 class="mb-0">Tilføj Eksamen</h5>
                     </div>
                     <div class="card-body">
                     <form method="post" asp-page-handler="CreateEvent">
@@ -309,7 +312,7 @@
                                     </div>
                                 }
                             </div>
-                            <small class="form-text text-muted">Vælg individuelle deltagere til eventet</small>
+                            <small class="form-text text-muted">Vælg individuelle deltagere til eksamen</small>
                         </div>
 
                         <div class="mb-3">
@@ -337,7 +340,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">
-                            <i class="bi bi-plus-circle"></i> Opret Event
+                            <i class="bi bi-plus-circle"></i> Opret Eksamen
                         </button>
                     </form>
                 </div>

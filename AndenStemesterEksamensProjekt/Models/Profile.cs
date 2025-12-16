@@ -7,7 +7,7 @@ namespace AndenStemesterEksamensProjekt.Models
     public class Profile
     {
         [Key]
-        [Column("puid")]
+        [Column("uid")]
         public int Uid { get; set; }
 
         [Column("navn")]
@@ -28,9 +28,5 @@ namespace AndenStemesterEksamensProjekt.Models
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
-
-        // Navigation property til User
-        [Column("uid")]
-        public int uid { get; set; }
     }
 }

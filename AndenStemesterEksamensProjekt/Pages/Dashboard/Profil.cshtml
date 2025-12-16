@@ -1,59 +1,114 @@
 ﻿@page
 @model AndenStemesterEksamensProjekt.Pages.Dashboard.DashboardModel
 
-<h1>Profilside</h1>
+<div class="container my-5">
+    <h1 class="mb-4">Profilside</h1>
 
-<div>
-    <h2>Bruger information</h2>
-    <p>User ID: @Model.CurrentUser?.Uid</p>
-    <p>Role: @Model.CurrentUser?.Role</p>
-    <p>Last Login: @Model.CurrentUser?.LastLogin?.ToString("dd/MM/yyyy HH:mm")</p>
-    <p>Account Created: @Model.CurrentUser?.CreatedAt.ToString("dd/MM/yyyy")</p>
-</div>
-
-@if (Model.CurrentProfile != null)
-{
-    <div>
-        <h2>Profil information</h2>
-        <p><strong>Navn:</strong> @Model.CurrentProfile.Navn</p>
-        <p><strong>Adresse:</strong> @Model.CurrentProfile.Adresse</p>
-        <p><strong>Mobil nr.:</strong> @Model.CurrentProfile.MobilNr</p>
-        <p><strong>Profil oprettet:</strong> @Model.CurrentProfile.CreatedAt.ToString("dd/MM/yyyy")</p>
-    </div>
-}
-else
-{
-    <div>
-        <p>Ingen profil information fundet.</p>
-        <a href="/Profile/Create" class="btn btn-primary">Opret profil</a>
-    </div>
-}
-<div class="mt-4">
-    <h2>Mine Hold</h2>
-    @if (Model.CurrentUser?.Role == "planner" || Model.CurrentUser?.Role == "admin")
-    {
-        <a href="/Teams/Create" class="btn btn-success mb-3">Opret nyt hold</a>
-        <a href="/Teams/Manage" class="btn btn-success mb-3 ms-2">Administrer hold</a>
-    }
-
-    @if (Model.Teams.Any())
-    {
-        <div class="list-group">
-            @foreach (var team in Model.Teams)
-            {
-                <div class="list-group-item">
-                    <h5 class="mb-1">@team.Name</h5>
-                    @if (!string.IsNullOrEmpty(team.Description))
-                    {
-                        <p class="mb-1 text-muted">@team.Description</p>
-                    }
-                    <small class="text-muted">Oprettet: @team.CreatedAt.ToString("dd/MM/yyyy")</small>
+    <!-- User Information Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Bruger Information</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Bruger ID:</strong></p>
+                    <p class="text-muted">@Model.CurrentUser?.Uid</p>
                 </div>
-            }
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Rolle:</strong></p>
+                    <p class="text-muted">@Model.CurrentUser?.Role</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Seneste login:</strong></p>
+                    <p class="text-muted">@Model.CurrentUser?.LastLogin?.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="mb-1"><strong>Konto oprettet:</strong></p>
+                    <p class="text-muted">@Model.CurrentUser?.CreatedAt.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Information Card -->
+    @if (Model.CurrentProfile != null)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Profil Information</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <p class="mb-1"><strong>Navn:</strong></p>
+                        <p class="text-dark">@Model.CurrentProfile.Navn</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p class="mb-1"><strong>Mobil nr.:</strong></p>
+                        <p class="text-dark">@Model.CurrentProfile.MobilNr</p>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <p class="mb-1"><strong>Adresse:</strong></p>
+                        <p class="text-dark">@Model.CurrentProfile.Adresse</p>
+                    </div>
+                    <div class="col-12">
+                        <small class="text-muted">Profil oprettet: @Model.CurrentProfile.CreatedAt.ToString("dd/MM/yyyy")</small>
+                    </div>
+                </div>
+            </div>
         </div>
     }
     else
     {
-        <p class="text-muted">Du er ikke medlem af nogen hold endnu.</p>
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Ingen profil information fundet</h4>
+            <p>Du har endnu ikke oprettet en profil. Opret en nu for at få adgang til flere funktioner.</p>
+            <a href="/Profile/Create" class="btn btn-primary">Opret profil</a>
+        </div>
     }
+
+    <!-- Teams Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Mine Hold</h2>
+        </div>
+        <div class="card-body">
+            @if (Model.CurrentUser?.Role == "planner" || Model.CurrentUser?.Role == "admin")
+            {
+                <div class="mb-3">
+                    <a href="/Teams/Create" class="btn btn-success">Opret nyt hold</a>
+                    <a href="/Teams/Manage" class="btn btn-success">Administrer hold</a>
+                </div>
+                <hr />
+            }
+
+            @if (Model.Teams.Any())
+            {
+                <div class="row g-3">
+                    @foreach (var team in Model.Teams)
+                    {
+                        <div class="col-md-6">
+                            <div class="card h-100 border-light">
+                                <div class="card-body">
+                                    <h5 class="card-title text-dark">@team.Name</h5>
+                                    @if (!string.IsNullOrEmpty(team.Description))
+                                    {
+                                        <p class="card-text text-muted">@team.Description</p>
+                                    }
+                                    <small class="text-muted d-block mt-2">Oprettet: @team.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-secondary" role="alert">
+                    <p class="mb-0">Du er ikke medlem af nogen hold endnu.</p>
+                </div>
+            }
+        </div>
+    </div>
 </div>

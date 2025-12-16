@@ -38,7 +38,7 @@ public class DashboardModel : PageModel
             return RedirectToPage("../Login");
         }
 
-        CurrentProfile = await _dbService.GetprofileAsync(userId.Value);
+        CurrentProfile = await _dbService.GetProfileAsync(userId.Value);
         
         // Load user teams
         Teams = await _dbService.GetUserTeamsAsync(userId.Value);

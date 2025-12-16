@@ -42,17 +42,17 @@ BEGIN
         ON CONFLICT (email) DO NOTHING;
         
         -- Create profile for each user
-        INSERT INTO profiles (puid, uid, navn, mobil_nr, adresse, created_at, updated_at)
+        INSERT INTO profiles (uid, navn, mobil_nr, adresse)
         SELECT 
-            u.uid,
             u.uid,
             'testuser ' || INITCAP(user_role),
             '+45 ' || LPAD((20000000 + i)::TEXT, 8, '0'),
-            'Test Address ' || i || ', 1234 Test City',
-            NOW(),
-            NOW()
+            'Test Address ' || i || ', 1234 Test City'
         FROM users u
         WHERE u.email = user_email
-        ON CONFLICT (uid) DO NOTHING;
+        ON CONFLICT (uid) DO UPDATE SET 
+            navn = EXCLUDED.navn,
+            mobil_nr = EXCLUDED.mobil_nr,
+            adresse = EXCLUDED.adresse;
     END LOOP;
 END $$;

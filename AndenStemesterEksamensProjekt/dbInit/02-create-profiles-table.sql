@@ -3,13 +3,13 @@ DROP TABLE IF EXISTS profiles CASCADE;
 
 -- Create profiles table
 CREATE TABLE profiles (
-    puid INTEGER PRIMARY KEY,
+    uid INTEGER PRIMARY KEY,
     navn VARCHAR(255) NOT NULL,
     adresse VARCHAR(500),
     mobil_nr VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    uid INTEGER UNIQUE NOT NULL
+    FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE
 );
 
 -- Create trigger to automatically update updated_at timestamp

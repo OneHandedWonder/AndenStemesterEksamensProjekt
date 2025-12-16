@@ -64,7 +64,7 @@ namespace AndenStemesterEksamensProjekt.Services
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Uid == uid && u.IsActive);
         }
-        public async Task<Profile?> GetprofileAsync(int userId)
+        public async Task<Profile?> GetProfileAsync(int userId)
         {
             return await _context.CurrentProfile
                 .FirstOrDefaultAsync(p => p.Uid == userId);
