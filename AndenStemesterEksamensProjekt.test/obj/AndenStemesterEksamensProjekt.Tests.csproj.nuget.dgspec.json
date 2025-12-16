@@ -1,39 +1,33 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.test\\AndenStemesterEksamensProjekt.Tests.csproj": {}
+    "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.test/AndenStemesterEksamensProjekt.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.test\\AndenStemesterEksamensProjekt.Tests.csproj": {
+    "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.test/AndenStemesterEksamensProjekt.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.test\\AndenStemesterEksamensProjekt.Tests.csproj",
+        "projectUniqueName": "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.test/AndenStemesterEksamensProjekt.Tests.csproj",
         "projectName": "AndenStemesterEksamensProjekt.Tests",
-        "projectPath": "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.test\\AndenStemesterEksamensProjekt.Tests.csproj",
-        "packagesPath": "C:\\Users\\emsu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.test\\obj\\",
+        "projectPath": "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.test/AndenStemesterEksamensProjekt.Tests.csproj",
+        "packagesPath": "/Users/emilsundberg/.nuget/packages/",
+        "outputPath": "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.test/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\emsu\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/emilsundberg/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.csproj": {
-                "projectPath": "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.csproj"
+              "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.csproj": {
+                "projectPath": "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.csproj"
               }
             }
           }
@@ -95,32 +89,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.csproj": {
+    "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.csproj",
+        "projectUniqueName": "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.csproj",
         "projectName": "AndenStemesterEksamensProjekt",
-        "projectPath": "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt.csproj",
-        "packagesPath": "C:\\Users\\emsu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emsu\\Documents\\AndenStemesterEksamensProjekt\\AndenStemesterEksamensProjekt\\obj\\",
+        "projectPath": "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt.csproj",
+        "packagesPath": "/Users/emilsundberg/.nuget/packages/",
+        "outputPath": "/Users/emilsundberg/Desktop/Zealand/Eksamen 2. Semester/AndenStemesterEksamensProjekt/AndenStemesterEksamensProjekt/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\emsu\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/emilsundberg/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -191,7 +179,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
