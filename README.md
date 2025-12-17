@@ -54,6 +54,25 @@ Projektet kommer med 100 forudindlæste testbrugere. Her er nogle eksempler:
 
 **Alle testbrugere (testuser1-100@example.com) bruger password:** `password123`
 
+### 5. Kør Unit Tests
+For at verificere at projektet fungerer korrekt, kan du køre de automatiske tests:
+
+```bash
+# Fra projektets rodmappe
+cd AndenStemesterEksamensProjekt.test
+dotnet test
+
+# Eller med detaljeret output
+dotnet test --verbosity normal
+```
+
+**Testene dækker:**
+- DatabaseService (database operationer)
+- EventService (eksamenskalender funktioner)
+- TeamService (hold administration)
+
+---
+
 ## Troubleshooting
 
 ### Problem: "Docker is not running"
@@ -80,7 +99,7 @@ libman restore
 
 ---
 
-## 👥 Testbrugere Oversigt
+## Testbrugere Oversigt
 
 Systemet indeholder 100 testbrugere fordelt således:
 - **60 studerende** (testuser1-60@example.com)
