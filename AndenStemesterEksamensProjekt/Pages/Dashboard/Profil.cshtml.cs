@@ -4,6 +4,8 @@ using AndenStemesterEksamensProjekt.Services;
 using AndenStemesterEksamensProjekt.Models;
 
 namespace AndenStemesterEksamensProjekt.Pages.Dashboard;
+// Lavet af:
+// Sophie
 public class DashboardModel : PageModel
 {
     private readonly DatabaseService _dbService;
@@ -69,6 +71,6 @@ public class DashboardModel : PageModel
             await Task.CompletedTask;
             return RedirectToPage("/Teams/Manage");
         }
-    }
 }
+
 
