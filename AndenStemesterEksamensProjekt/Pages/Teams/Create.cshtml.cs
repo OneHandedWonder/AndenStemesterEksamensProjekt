@@ -5,7 +5,8 @@ using AndenStemesterEksamensProjekt.Services;
 using AndenStemesterEksamensProjekt.Data;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-
+// Lavet af:
+// Emil
 namespace AndenStemesterEksamensProjekt.Pages.Teams
 {
     public class CreateModel : PageModel

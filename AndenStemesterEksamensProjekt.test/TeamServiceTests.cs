@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using AndenStemesterEksamensProjekt.Data;
 using AndenStemesterEksamensProjekt.Models;
 using AndenStemesterEksamensProjekt.Services;
-
+// Lavet af Emil
 namespace AndenStemesterEksamensProjekt.Tests
 {
     public class TeamServiceTests : IDisposable
@@ -29,16 +29,16 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetAllTeamsAsync_ReturnsAllTeams()
         {
-            // Arrange
+            // Arrange - Klargør
             var team1 = new Team { Name = "Team A", Description = "First team", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             var team2 = new Team { Name = "Team B", Description = "Second team", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             _context.Teams.AddRange(team1, team2);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.GetAllTeamsAsync();
 
-            // Assert
+            // Assert - Bekræft
             Assert.Equal(2, result.Count);
             Assert.Contains(result, t => t.Name == "Team A");
             Assert.Contains(result, t => t.Name == "Team B");
@@ -47,15 +47,15 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetTeamByIdAsync_WithValidId_ReturnsTeam()
         {
-            // Arrange
+            // Arrange - Klargør
             var team = new Team { Name = "Test Team", Description = "Test", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.GetTeamByIdAsync(team.Id);
 
-            // Assert
+            // Assert - Bekræft
             Assert.NotNull(result);
             Assert.Equal("Test Team", result.Name);
             Assert.Equal("Test", result.Description);
@@ -64,26 +64,26 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetTeamByIdAsync_WithInvalidId_ReturnsNull()
         {
-            // Act
+            // Act - Udfør
             var result = await _teamService.GetTeamByIdAsync(999);
 
-            // Assert
+            // Assert - Bekræft
             Assert.Null(result);
         }
 
         [Fact]
         public async Task CreateTeamAsync_CreatesNewTeam()
         {
-            // Act
+            // Act - Udfør
             var result = await _teamService.CreateTeamAsync("New Team", "Team Description");
 
-            // Assert
+            // Assert - Bekræft
             Assert.NotNull(result);
             Assert.Equal("New Team", result.Name);
             Assert.Equal("Team Description", result.Description);
             Assert.True(result.Id > 0);
 
-            // Verify in database
+            // Verificer i databasen
             var teamInDb = await _context.Teams.FindAsync(result.Id);
             Assert.NotNull(teamInDb);
             Assert.Equal("New Team", teamInDb.Name);
@@ -92,15 +92,15 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task UpdateTeamAsync_WithValidId_UpdatesTeam()
         {
-            // Arrange
+            // Arrange - Klargør
             var team = new Team { Name = "Original", Description = "Original Desc", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.UpdateTeamAsync(team.Id, "Updated", "Updated Desc");
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(result);
             var updatedTeam = await _context.Teams.FindAsync(team.Id);
             Assert.NotNull(updatedTeam);
@@ -111,25 +111,25 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task UpdateTeamAsync_WithInvalidId_ReturnsFalse()
         {
-            // Act
+            // Act - Udfør
             var result = await _teamService.UpdateTeamAsync(999, "Updated", "Updated Desc");
 
-            // Assert
+            // Assert - Bekræft
             Assert.False(result);
         }
 
         [Fact]
         public async Task DeleteTeamAsync_WithValidId_DeletesTeam()
         {
-            // Arrange
+            // Arrange - Klargør
             var team = new Team { Name = "To Delete", Description = "Will be deleted", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.DeleteTeamAsync(team.Id);
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(result);
             var deletedTeam = await _context.Teams.FindAsync(team.Id);
             Assert.Null(deletedTeam);
@@ -138,17 +138,17 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task DeleteTeamAsync_WithInvalidId_ReturnsFalse()
         {
-            // Act
+            // Act - Udfør
             var result = await _teamService.DeleteTeamAsync(999);
 
-            // Assert
+            // Assert - Bekræft
             Assert.False(result);
         }
 
         [Fact]
         public async Task AddUserToTeamAsync_AddsUserSuccessfully()
         {
-            // Arrange
+            // Arrange - Klargør
             var team = new Team { Name = "Team", Description = "Desc", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             var user = new User 
             { 
@@ -164,10 +164,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.AddUserToTeamAsync(team.Id, user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(result);
             var userTeam = await _context.UserTeams
                 .FirstOrDefaultAsync(ut => ut.TeamId == team.Id && ut.UserId == user.Uid);
@@ -177,7 +177,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task AddUserToTeamAsync_WithDuplicateMember_ReturnsFalse()
         {
-            // Arrange
+            // Arrange - Klargør
             var team = new Team { Name = "Team", Description = "Desc", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             var user = new User 
             { 
@@ -195,17 +195,17 @@ namespace AndenStemesterEksamensProjekt.Tests
 
             await _teamService.AddUserToTeamAsync(team.Id, user.Uid);
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.AddUserToTeamAsync(team.Id, user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.False(result);
         }
 
         [Fact]
         public async Task RemoveUserFromTeamAsync_RemovesUserSuccessfully()
         {
-            // Arrange
+            // Arrange - Klargør
             var team = new Team { Name = "Team", Description = "Desc", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             var user = new User 
             { 
@@ -223,10 +223,10 @@ namespace AndenStemesterEksamensProjekt.Tests
 
             await _teamService.AddUserToTeamAsync(team.Id, user.Uid);
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.RemoveUserFromTeamAsync(team.Id, user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(result);
             var userTeam = await _context.UserTeams
                 .FirstOrDefaultAsync(ut => ut.TeamId == team.Id && ut.UserId == user.Uid);
@@ -236,7 +236,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetTeamMembersAsync_ReturnsAllMembers()
         {
-            // Arrange
+            // Arrange - Klargør
             var team = new Team { Name = "Team", Description = "Desc", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
             var user1 = new User 
             { 
@@ -266,10 +266,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             await _teamService.AddUserToTeamAsync(team.Id, user1.Uid);
             await _teamService.AddUserToTeamAsync(team.Id, user2.Uid);
 
-            // Act
+            // Act - Udfør
             var result = await _teamService.GetTeamMembersAsync(team.Id);
 
-            // Assert
+            // Assert - Bekræft
             Assert.Equal(2, result.Count);
             Assert.Contains(result, u => u.Email == "user1@test.com");
             Assert.Contains(result, u => u.Email == "user2@test.com");

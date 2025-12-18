@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using AndenStemesterEksamensProjekt.Data;
 using AndenStemesterEksamensProjekt.Models;
 using AndenStemesterEksamensProjekt.Services;
-
+// Lavet af Emil
 namespace AndenStemesterEksamensProjekt.Tests
 {
     public class EventServiceTests : IDisposable
@@ -29,7 +29,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetUserEventsAsync_ReturnsEventsCreatedByUser()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = await CreateTestUser("creator@test.com");
             var event1 = new CalendarEvent
             {
@@ -52,10 +52,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.CalendarEvents.AddRange(event1, event2);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.GetUserEventsAsync(user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.Equal(2, result.Count);
             Assert.All(result, e => Assert.Equal(user.Uid, e.UserId));
         }
@@ -63,7 +63,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetUserEventsAsync_ReturnsEventsWhereUserIsParticipant()
         {
-            // Arrange
+            // Arrange - Klargør
             var creator = await CreateTestUser("creator@test.com");
             var participant = await CreateTestUser("participant@test.com");
 
@@ -87,10 +87,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.EventParticipants.Add(eventParticipant);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.GetUserEventsAsync(participant.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.Single(result);
             Assert.Equal(calendarEvent.EventId, result[0].EventId);
         }
@@ -98,7 +98,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetUserEventsByDateRangeAsync_ReturnsEventsInRange()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = await CreateTestUser("user@test.com");
             var startDate = DateTime.UtcNow;
             var endDate = startDate.AddDays(7);
@@ -124,10 +124,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.CalendarEvents.AddRange(eventInRange, eventOutOfRange);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.GetUserEventsByDateRangeAsync(user.Uid, startDate, endDate);
 
-            // Assert
+            // Assert - Bekræft
             Assert.Single(result);
             Assert.Equal("In Range", result[0].Title);
         }
@@ -135,7 +135,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task CreateEventAsync_CreatesNewEvent()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = await CreateTestUser("creator@test.com");
             var newEvent = new CalendarEvent
             {
@@ -147,17 +147,17 @@ namespace AndenStemesterEksamensProjekt.Tests
                 EndTime = DateTime.UtcNow.AddDays(1).AddHours(2)
             };
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.CreateEventAsync(newEvent);
 
-            // Assert
+            // Assert - Bekræft
             Assert.NotNull(result);
             Assert.True(result.EventId > 0);
             Assert.Equal("New Event", result.Title);
             Assert.Equal(DateTimeKind.Utc, result.StartTime.Kind);
             Assert.Equal(DateTimeKind.Utc, result.EndTime.Kind);
 
-            // Verify in database
+            // Verificer i databasen
             var eventInDb = await _context.CalendarEvents.FindAsync(result.EventId);
             Assert.NotNull(eventInDb);
             Assert.Equal("New Event", eventInDb.Title);
@@ -166,7 +166,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task UpdateEventAsync_UpdatesExistingEvent()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = await CreateTestUser("creator@test.com");
             var originalEvent = new CalendarEvent
             {
@@ -191,10 +191,10 @@ namespace AndenStemesterEksamensProjekt.Tests
                 EndTime = DateTime.UtcNow.AddDays(1).AddHours(2)
             };
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.UpdateEventAsync(updatedEvent);
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(result);
             var eventInDb = await _context.CalendarEvents.FindAsync(originalEvent.EventId);
             Assert.NotNull(eventInDb);
@@ -206,7 +206,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task DeleteEventAsync_DeletesEvent()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = await CreateTestUser("creator@test.com");
             var calendarEvent = new CalendarEvent
             {
@@ -220,10 +220,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.CalendarEvents.Add(calendarEvent);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.DeleteEventAsync(calendarEvent.EventId, user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(result);
             var deletedEvent = await _context.CalendarEvents.FindAsync(calendarEvent.EventId);
             Assert.Null(deletedEvent);
@@ -232,7 +232,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task AddParticipantAsync_AddsParticipantToEvent()
         {
-            // Arrange
+            // Arrange - Klargør
             var creator = await CreateTestUser("creator@test.com");
             var participant = await CreateTestUser("participant@test.com");
 
@@ -248,10 +248,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.CalendarEvents.Add(calendarEvent);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.AddParticipantAsync(calendarEvent.EventId, participant.Uid, creator.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(result);
             var eventParticipant = await _context.EventParticipants
                 .FirstOrDefaultAsync(ep => ep.EventId == calendarEvent.EventId && ep.UserId == participant.Uid);
@@ -261,7 +261,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetEventParticipantsAsync_ReturnsAllParticipants()
         {
-            // Arrange
+            // Arrange - Klargør
             var creator = await CreateTestUser("creator@test.com");
             var participant1 = await CreateTestUser("participant1@test.com");
             var participant2 = await CreateTestUser("participant2@test.com");
@@ -281,10 +281,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             await _eventService.AddParticipantAsync(calendarEvent.EventId, participant1.Uid, creator.Uid);
             await _eventService.AddParticipantAsync(calendarEvent.EventId, participant2.Uid, creator.Uid);
 
-            // Act
+            // Act - Udfør
             var result = await _eventService.GetEventParticipantsAsync(calendarEvent.EventId);
 
-            // Assert
+            // Assert - Bekræft
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
             Assert.NotEmpty(result);

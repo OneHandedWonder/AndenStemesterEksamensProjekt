@@ -4,7 +4,8 @@ using AndenStemesterEksamensProjekt.Models;
 using AndenStemesterEksamensProjekt.Services;
 using Microsoft.EntityFrameworkCore;
 using AndenStemesterEksamensProjekt.Data;
-
+// Lavet af:
+// Emil & Sophie
 namespace AndenStemesterEksamensProjekt.Pages.Dashboard
 {
     public class KalenderModel : PageModel

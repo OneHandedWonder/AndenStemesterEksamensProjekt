@@ -1,7 +1,8 @@
--- Drop table if it exists (for development purposes)
+-- Drop tabel hvis den allerede eksisterer (til udviklingsformål)
+-- Lavet af Emil
 DROP TABLE IF EXISTS sessions CASCADE;
 
--- Create sessions table
+-- Opret sessions tabel
 CREATE TABLE sessions (
     session_id SERIAL PRIMARY KEY,
     uid INT NOT NULL,

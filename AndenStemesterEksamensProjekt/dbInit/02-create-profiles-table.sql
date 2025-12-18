@@ -1,7 +1,9 @@
-﻿-- Drop table if it exists (for development purposes)
+﻿-- Drop tabeller hvis de allerede eksisterer
+-- CASCADE bruges for at fjerne afhængigheder
+-- Lavet af Sophie
 DROP TABLE IF EXISTS profiles CASCADE;
 
--- Create profiles table
+-- Opret profiles tabel
 CREATE TABLE profiles (
     uid INTEGER PRIMARY KEY,
     navn VARCHAR(255) NOT NULL,
@@ -12,7 +14,7 @@ CREATE TABLE profiles (
     FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE
 );
 
--- Create trigger to automatically update updated_at timestamp
+-- Opret trigger for automatisk opdatering af updated_at timestamp
 CREATE OR REPLACE FUNCTION update_profiles_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -26,10 +28,10 @@ CREATE TRIGGER trigger_update_profiles_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_profiles_updated_at();
 
--- Insert a test profile for the test user
+-- Indsæt en testprofil
 INSERT INTO profiles (uid, navn, adresse, mobil_nr, puid)
 VALUES (1, 'Test Bruger', 'Testvej 123, 1234 Testby', '+45 12 34 56 78', 1)
 ON CONFLICT (uid) DO NOTHING;
 
--- Display created table
+-- Vis oprettet tabel
 SELECT 'Profiles table created successfully!' as status;

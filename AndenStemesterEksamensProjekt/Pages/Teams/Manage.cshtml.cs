@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AndenStemesterEksamensProjekt.Models;
 using AndenStemesterEksamensProjekt.Services;
-
+// Lavet af:
+// Emil
 namespace AndenStemesterEksamensProjekt.Pages.Teams
 {
     public class ManageModel : PageModel

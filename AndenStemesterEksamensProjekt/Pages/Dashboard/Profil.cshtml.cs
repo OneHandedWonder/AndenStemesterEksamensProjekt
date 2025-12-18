@@ -3,35 +3,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AndenStemesterEksamensProjekt.Services;
 using AndenStemesterEksamensProjekt.Models;
 
-namespace AndenStemesterEksamensProjekt.Pages.Dashboard
+namespace AndenStemesterEksamensProjekt.Pages.Dashboard;
+public class DashboardModel : PageModel
 {
-    /// <summary>
-    /// Page model for brugerens profilside
-    /// </summary>
-    public class DashboardModel : PageModel
-    {
-        private readonly DatabaseService _dbService;
-        private readonly ILogger<DashboardModel> _logger;
-        
-        /// <summary>
-        /// ID for den aktuelle bruger fra session
-        /// </summary>
-        public int? userId { get; set; }
-        
-        /// <summary>
-        /// Den aktuelle brugers brugeroplysninger
-        /// </summary>
-        public User? CurrentUser { get; set; }
-        
-        /// <summary>
-        /// Den aktuelle brugers profiloplysninger
-        /// </summary>
-        public Profile? CurrentProfile { get; set; }
-        
-        /// <summary>
-        /// Liste over hold som brugeren er medlem af
-        /// </summary>
-        public List<Team> Teams { get; set; } = new();
+    private readonly DatabaseService _dbService;
+    private readonly ILogger<DashboardModel> _logger;
+    
+    public int? userId { get; set; }
+    public User? CurrentUser { get; set; }
+    public Profile? CurrentProfile { get; set; }
+    public List<Team> Teams { get; set; } = new();
 
         /// <summary>
         /// Constructor - Injicerer nødvendige services

@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AndenStemesterEksamensProjekt.Services;
 using BCrypt.Net;
-
+// Lavet af:
+// Emil
 namespace AndenStemesterEksamensProjekt.Pages
 {
     public class loginModel : PageModel
