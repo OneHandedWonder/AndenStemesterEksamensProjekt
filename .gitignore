@@ -122,3 +122,8 @@ _pkginfo.txt
 *.swp
 *.swo
 *~
+AndenStemesterEksamensProjekt.test/obj/AndenStemesterEksamensProjekt.Tests.csproj.nuget.dgspec.json
+AndenStemesterEksamensProjekt.test/obj/AndenStemesterEksamensProjekt.Tests.csproj.nuget.g.props
+AndenStemesterEksamensProjekt.test/obj/AndenStemesterEksamensProjekt.Tests.csproj.nuget.g.targets
+AndenStemesterEksamensProjekt.test/obj/project.assets.json
+AndenStemesterEksamensProjekt.test/obj/project.nuget.cache

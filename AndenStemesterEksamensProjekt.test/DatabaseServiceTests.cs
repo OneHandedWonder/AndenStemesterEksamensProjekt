@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using AndenStemesterEksamensProjekt.Data;
 using AndenStemesterEksamensProjekt.Models;
 using AndenStemesterEksamensProjekt.Services;
-
+// Lavet af Emil
 namespace AndenStemesterEksamensProjekt.Tests
 {
     public class DatabaseServiceTests : IDisposable
