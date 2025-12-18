@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+// Lavet af:
+// Emil & Sophie
 namespace AndenStemesterEksamensProjekt.Models
 {
     [Table("user_teams")]

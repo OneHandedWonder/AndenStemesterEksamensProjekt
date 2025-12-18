@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AndenStemesterEksamensProjekt.Services;
-
+// Lavet af:
+// Emil
 namespace AndenStemesterEksamensProjekt.Pages
 {
     public class logoutModel : PageModel

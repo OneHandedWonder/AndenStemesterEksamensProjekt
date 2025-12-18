@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using AndenStemesterEksamensProjekt.Data;
 using AndenStemesterEksamensProjekt.Models;
-
+// Lavet af:
+// Emil
 namespace AndenStemesterEksamensProjekt.Services
 {
     public class EventService
@@ -14,12 +15,12 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get all events for a specific user
-        /// Includes both events created by the user AND events where the user is a participant
+        /// Hent alle begivenheder for en specifik bruger
+        /// Inkluderer både begivenheder oprettet af brugeren OG begivenheder hvor brugeren er deltager
         /// </summary>
         public async Task<List<CalendarEvent>> GetUserEventsAsync(int userId)
         {
-            // Get event IDs where user is a participant
+            // Hent begivenhed ID'er hvor brugeren er deltager
             var participantEventIds = await _context.EventParticipants
                 .Where(ep => ep.UserId == userId)
                 .Select(ep => ep.EventId)
@@ -33,18 +34,18 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get events for a specific user within a date range
-        /// Includes both events created by the user AND events where the user is a participant
+        /// Hent begivenheder for en specifik bruger inden for en datoperiode
+        /// Inkluderer både begivenheder oprettet af brugeren OG begivenheder hvor brugeren er deltager
         /// </summary>
         public async Task<List<CalendarEvent>> GetUserEventsByDateRangeAsync(int userId, DateTime startDate, DateTime endDate)
         {
-            // Get event IDs where user is a participant
+            // Hent begivenhed ID'er hvor brugeren er deltager
             var participantEventIds = await _context.EventParticipants
                 .Where(ep => ep.UserId == userId)
                 .Select(ep => ep.EventId)
                 .ToListAsync();
 
-            // Get events created by user OR where user is a participant
+            // Hent begivenheder oprettet af brugeren ELLER hvor brugeren er deltager
             return await _context.CalendarEvents
                 .Where(e => (e.UserId == userId || participantEventIds.Contains(e.EventId)) &&
                            e.StartTime >= startDate && 
@@ -54,7 +55,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get a specific event by ID
+        /// Hent en specifik begivenhed efter ID
         /// </summary>
         public async Task<CalendarEvent?> GetEventByIdAsync(int eventId, int userId)
         {
@@ -63,11 +64,11 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Create a new calendar event
+        /// Opret en ny kalenderbegivenhed
         /// </summary>
         public async Task<CalendarEvent> CreateEventAsync(CalendarEvent calendarEvent)
         {
-            // Ensure times are in UTC
+            // Sikr at tider er i UTC
             calendarEvent.StartTime = DateTime.SpecifyKind(calendarEvent.StartTime, DateTimeKind.Utc);
             calendarEvent.EndTime = DateTime.SpecifyKind(calendarEvent.EndTime, DateTimeKind.Utc);
             calendarEvent.CreatedAt = DateTime.UtcNow;
@@ -80,7 +81,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Update an existing event
+        /// Opdater en eksisterende begivenhed
         /// </summary>
         public async Task<bool> UpdateEventAsync(CalendarEvent calendarEvent)
         {
@@ -104,7 +105,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Delete an event
+        /// Slet en begivenhed
         /// </summary>
         public async Task<bool> DeleteEventAsync(int eventId, int userId)
         {
@@ -120,7 +121,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get events for current month
+        /// Hent begivenheder for nuværende måned
         /// </summary>
         public async Task<List<CalendarEvent>> GetCurrentMonthEventsAsync(int userId, int year, int month)
         {
@@ -131,23 +132,23 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Add a participant to an event
+        /// Tilføj en deltager til en begivenhed
         /// </summary>
         public async Task<bool> AddParticipantAsync(int eventId, int userId, int requestingUserId)
         {
-            // Check if event exists and requesting user owns it or is admin
+            // Tjek om begivenheden eksisterer og den anmodende bruger ejer den eller er admin
             var calendarEvent = await _context.CalendarEvents
                 .FirstOrDefaultAsync(e => e.EventId == eventId);
 
             if (calendarEvent == null)
                 return false;
 
-            // Check if user already participating
+            // Tjek om brugeren allerede deltager
             var existingParticipant = await _context.EventParticipants
                 .FirstOrDefaultAsync(p => p.EventId == eventId && p.UserId == userId);
 
             if (existingParticipant != null)
-                return false; // Already participating
+                return false; // Deltager allerede
 
             var participant = new EventParticipant
             {
@@ -163,7 +164,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Remove a participant from an event
+        /// Fjern en deltager fra en begivenhed
         /// </summary>
         public async Task<bool> RemoveParticipantAsync(int eventId, int userId)
         {
@@ -179,7 +180,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Update participant status (accept/decline)
+        /// Opdater deltager status (accepter/afvis)
         /// </summary>
         public async Task<bool> UpdateParticipantStatusAsync(int eventId, int userId, string status)
         {
@@ -195,7 +196,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get all participants for an event
+        /// Hent alle deltagere for en begivenhed
         /// </summary>
         public async Task<List<EventParticipant>> GetEventParticipantsAsync(int eventId)
         {
@@ -206,7 +207,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get all events a user is participating in
+        /// Hent alle begivenheder en bruger deltager i
         /// </summary>
         public async Task<List<CalendarEvent>> GetUserParticipatingEventsAsync(int userId)
         {
@@ -218,7 +219,7 @@ namespace AndenStemesterEksamensProjekt.Services
                 .ToListAsync();
         }
         /// <summary>
-        /// Get overlapping events for given participants
+        /// Hent overlappende begivenheder for givne deltagere
         /// </summary>
         public async Task<List<CalendarEvent>> GetOverlappingEventsAsync(CalendarEvent newEvent, List<int> participantIds)
         {

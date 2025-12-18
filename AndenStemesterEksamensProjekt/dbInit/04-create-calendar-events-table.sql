@@ -1,7 +1,8 @@
--- Drop table if it exists (for development purposes)
+-- Drop tabel hvis den allerede eksisterer (til udviklingsformål)
+-- Lavet af Emil
 DROP TABLE IF EXISTS calendar_events CASCADE;
 
--- Create calendar_events table
+-- Opret calendar_events tabel
 CREATE TABLE calendar_events (
     event_id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -19,6 +20,6 @@ CREATE TABLE calendar_events (
     FOREIGN KEY (user_id) REFERENCES users(uid) ON DELETE CASCADE
 );
 
--- Create index for faster queries
+-- Opret indeks for hurtigere forespørgsler
 CREATE INDEX IF NOT EXISTS idx_calendar_events_user_id ON calendar_events(user_id);
 CREATE INDEX IF NOT EXISTS idx_calendar_events_start_time ON calendar_events(start_time);

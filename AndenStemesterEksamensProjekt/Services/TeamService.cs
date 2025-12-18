@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using AndenStemesterEksamensProjekt.Data;
 using AndenStemesterEksamensProjekt.Models;
-
+// lavet af:
+// Emil
 namespace AndenStemesterEksamensProjekt.Services
 {
     public class TeamService
@@ -14,7 +15,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get all teams
+        /// Hent alle teams
         /// </summary>
         public async Task<List<Team>> GetAllTeamsAsync()
         {
@@ -33,7 +34,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
         */
         /// <summary>
-        /// Get a team by ID with members
+        /// Hent et team efter ID med medlemmer
         /// </summary>
         public async Task<Team?> GetTeamByIdAsync(int teamId)
         {
@@ -44,7 +45,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Create a new team
+        /// Opret et nyt team
         /// </summary>
         public async Task<Team> CreateTeamAsync(string name, string? description)
         {
@@ -63,7 +64,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Update team details
+        /// Opdater team detaljer
         /// </summary>
         public async Task<bool> UpdateTeamAsync(int teamId, string name, string? description)
         {
@@ -80,7 +81,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Delete a team
+        /// Slet et team
         /// </summary>
         public async Task<bool> DeleteTeamAsync(int teamId)
         {
@@ -94,11 +95,11 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Add a user to a team
+        /// Tilføj en bruger til et team
         /// </summary>
         public async Task<bool> AddUserToTeamAsync(int teamId, int userId)
         {
-            // Check if user is already in team
+            // Tjek om brugeren allerede er i teamet
             var exists = await _context.UserTeams
                 .AnyAsync(ut => ut.TeamId == teamId && ut.UserId == userId);
 
@@ -118,7 +119,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Remove a user from a team
+        /// Fjern en bruger fra et team
         /// </summary>
         public async Task<bool> RemoveUserFromTeamAsync(int teamId, int userId)
         {
@@ -134,7 +135,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get all members of a team
+        /// Hent alle medlemmer af et team
         /// </summary>
         public async Task<List<User>> GetTeamMembersAsync(int teamId)
         {
@@ -148,7 +149,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get all teams a user belongs to
+        /// Hent alle teams en bruger tilhører
         /// </summary>
         public async Task<List<Team>> GetUserTeamsAsync(int userId)
         {

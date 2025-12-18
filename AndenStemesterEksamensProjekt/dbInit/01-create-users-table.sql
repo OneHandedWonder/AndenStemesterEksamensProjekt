@@ -1,5 +1,6 @@
--- Drop table if it exists (for development purposes)
--- CASCADE ensures dependent tables are also dropped
+-- Drop tabeller hvis de allerede eksisterer
+-- CASCADE bruges for at fjerne afhængigheder
+-- Lavet af Emil
 DROP TABLE IF EXISTS calendar_events CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
 DROP TABLE IF EXISTS profiles CASCADE;
@@ -7,7 +8,7 @@ DROP TABLE IF EXISTS user_teams CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS teams CASCADE;
 
--- Create users table
+-- Opret users tabel
 CREATE TABLE users (
     uid SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -21,18 +22,18 @@ CREATE TABLE users (
     role VARCHAR(50) DEFAULT 'guest' CHECK (role IN ('guest', 'student', 'lecturer', 'planner', 'censor', 'admin'))
 );
 
--- Create index on email for faster lookups
+-- Opret indeks på email for hurtigere opslag
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 
--- Create index on is_active for filtering active users
+-- Opret indeks på is_active for filtrering af aktive brugere
 CREATE INDEX IF NOT EXISTS idx_users_active ON users(is_active);
 
--- Insert a test user
+-- indset en testbruger
 -- Email: test@example.com  
 -- Password: password123
 INSERT INTO users (email, firstName, lastName, password_hash, role) 
 VALUES ('test@example.com', 'test', 'Admin', '$2a$12$SPDmr7PZip/M2r8KVZk/veE4GHkWUkJsho93T1K9n2ox4isAd2e1e', 'admin') -- Hash for pw.
 ON CONFLICT (email) DO NOTHING;
 
--- Display created table
+-- Vis oprettet tabel
 SELECT 'Users table created successfully!' as status;

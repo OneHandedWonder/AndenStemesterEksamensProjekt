@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using AndenStemesterEksamensProjekt.Data;
 using AndenStemesterEksamensProjekt.Models;
-
+// Lavet af:
+// Emil & Sophie
 namespace AndenStemesterEksamensProjekt.Services
 {
     public class DatabaseService
@@ -14,7 +15,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get a user by email address
+        /// Hent en bruger efter email adresse
         /// </summary>
         public async Task<User?> GetUserByEmailAsync(string email)
         {
@@ -23,7 +24,7 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Update last login timestamp for a user
+        /// Opdater sidste login tidsstempel for en bruger
         /// </summary>
         public async Task UpdateLastLoginAsync(int uid)
         {
@@ -36,7 +37,8 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Create a new user with hashed password
+        /// Opret en ny bruger med hashet adgangskode
+        /// Lavet af Emil
         /// </summary>
         public async Task<int> CreateUserAsync(string email, string passwordHash)
         {
@@ -71,7 +73,8 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Get all teams for a user
+        /// Hent alle teams for en bruger
+        /// Lavet af Emil
         /// </summary>
         public async Task<List<Team>> GetUserTeamsAsync(int userId)
         {
@@ -83,11 +86,12 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Create a new session with a random token
+        /// Opret en ny session med en tilfældig token
+        /// Lavet af Emil
         /// </summary>
         public async Task<string> CreateSessionAsync(int uid, int expirationDays = 30)
         {
-            // Generate a random 32-character token
+            // Generer en tilfældig 32-tegn token
             var sessionToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray()) + Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             sessionToken = sessionToken.Replace("+", "").Replace("/", "").Replace("=", "").Substring(0, 32);
 
@@ -106,7 +110,8 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Validate a session token and return the user ID if valid
+        /// Valider en session token og returner bruger ID hvis gyldig
+        /// Lavet af Emil
         /// </summary>
         public async Task<int?> ValidateSessionAsync(string sessionToken)
         {
@@ -115,7 +120,8 @@ namespace AndenStemesterEksamensProjekt.Services
         }
 
         /// <summary>
-        /// Delete all sessions for a user (logout)
+        /// Slet alle sessioner for en bruger (logout)
+        /// Lavet af Emil
         /// </summary>
         public async Task DeleteUserSessionsAsync(int uid)
         {

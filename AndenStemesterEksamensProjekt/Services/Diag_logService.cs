@@ -1,5 +1,7 @@
 namespace AndenStemesterEksamensProjekt.Services
 {
+    //lavet af:
+    // Emil
     class Diag_logService
     {
         public static void Log(string message)

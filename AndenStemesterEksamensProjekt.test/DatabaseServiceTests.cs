@@ -29,7 +29,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetUserByEmailAsync_WithValidEmail_ReturnsUser()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = new User
             {
                 Email = "testUser@example.com",
@@ -43,10 +43,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _databaseService.GetUserByEmailAsync("testUser@example.com");
 
-            // Assert
+            // Assert - Bekræft
             Assert.NotNull(result);
             Assert.Equal("testUser@example.com", result.Email);
             Assert.Equal("Test", result.FirstName);
@@ -56,7 +56,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetUserByEmailAsync_WithInactiveUser_ReturnsNull()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = new User
             {
                 Email = "inactive@example.com",
@@ -70,27 +70,27 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _databaseService.GetUserByEmailAsync("inactive@example.com");
 
-            // Assert
+            // Assert - Bekræft
             Assert.Null(result);
         }
 
         [Fact]
         public async Task GetUserByEmailAsync_WithNonExistentEmail_ReturnsNull()
         {
-            // Act
+            // Act - Udfør
             var result = await _databaseService.GetUserByEmailAsync("nonexistent@example.com");
 
-            // Assert
+            // Assert - Bekræft
             Assert.Null(result);
         }
 
         [Fact]
         public async Task UpdateLastLoginAsync_UpdatesTimestamp()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = new User
             {
                 Email = "test@example.com",
@@ -107,10 +107,10 @@ namespace AndenStemesterEksamensProjekt.Tests
 
             var beforeUpdate = DateTime.UtcNow;
 
-            // Act
+            // Act - Udfør
             await _databaseService.UpdateLastLoginAsync(user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             var updatedUser = await _context.Users.FindAsync(user.Uid);
             Assert.NotNull(updatedUser);
             var time = DateTime.UtcNow;
@@ -121,10 +121,10 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task CreateUserAsync_CreatesNewUser()
         {
-            // Act
+            // Act - Udfør
             var userId = await _databaseService.CreateUserAsync("newtestuser@example.com", "hashedpassword");
 
-            // Assert
+            // Assert - Bekræft
             Assert.True(userId > 0);
             var user = await _context.Users.FindAsync(userId);
             Assert.NotNull(user);
@@ -136,7 +136,7 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetUserByIdAsync_WithValidId_ReturnsUser()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = new User
             {
                 Email = "testUser@example.com",
@@ -150,10 +150,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _databaseService.GetUserByIdAsync(user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.NotNull(result);
             Assert.Equal(user.Uid, result.Uid);
             Assert.Equal("testUser@example.com", result.Email);
@@ -162,17 +162,17 @@ namespace AndenStemesterEksamensProjekt.Tests
         [Fact]
         public async Task GetUserByIdAsync_WithInvalidId_ReturnsNull()
         {
-            // Act
+            // Act - Udfør
             var result = await _databaseService.GetUserByIdAsync(999);
 
-            // Assert
+            // Assert - Bekræft
             Assert.Null(result);
         }
 
         [Fact]
         public async Task GetUserByIdAsync_WithInactiveUser_ReturnsNull()
         {
-            // Arrange
+            // Arrange - Klargør
             var user = new User
             {
                 Email = "inactive@example.com",
@@ -186,10 +186,10 @@ namespace AndenStemesterEksamensProjekt.Tests
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Act
+            // Act - Udfør
             var result = await _databaseService.GetUserByIdAsync(user.Uid);
 
-            // Assert
+            // Assert - Bekræft
             Assert.Null(result);
         }
     }
